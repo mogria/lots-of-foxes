@@ -1,6 +1,9 @@
 package lots.of.foxes;
 
+import java.awt.Color;
+import lots.of.foxes.ai.DumbAITurnHandler;
 import lots.of.foxes.model.Board;
+import lots.of.foxes.model.Player;
 
 /**
  *
@@ -17,6 +20,10 @@ public class GameCreator {
         this.board = buildBoard();
     }
     
+    /**
+     * Creates an instance of GameController, depending on the GameConfig
+     * @return an GameController instance
+     */
     public GameController buildGameController() {
         switch(config.getGameType()) {
             default:
@@ -30,22 +37,42 @@ public class GameCreator {
         } 
     }
     
+    /**
+     * Creates an instance of a Board, depending on the configured BoardSize
+     * @return an Board instance
+     */
     public Board buildBoard() {
         return new Board(config.getBoardSizeX(), config.getBoardSizeY());
     }
     
+    /**
+     * Creates an instance of UITurnHandler depending on the GameConfig
+     * @return an UITurnHandler instance
+     */
     public ITurnHandler buildUITurnHandler() {
         return null;
     }
     
+    /**
+     * Creates an instance of AITurnHandler depending on the GameConfig
+     * @return an AITurnHandler instance
+     */
     public ITurnHandler buildAITurnHandler() {
-        return null;
+        return new DumbAITurnHandler(board, new Player("DumbAI", Color.yellow));
     }
     
+    /**
+     * Creates an instance of HostRemoteTurnHandler depending on the GameConfig
+     * @return an HostRemoteTurnHandler instance
+     */
     public ITurnHandler buildHostRemoteTurnHandler() {
         return null;
     }
     
+    /**
+     * Creates an instance of ClientRemoteTurnHandler depending on the GameConfig
+     * @return an ClientRemoteTurnHandler instance
+     */
     public ITurnHandler buildClientRemoteTurnHandler() {
         return null;
     }
