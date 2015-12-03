@@ -25,6 +25,12 @@ public class Line {
      */
     private Player owner = null;
 
+    public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
+        adjacentBoxes[0] = adjacentBox1;
+        adjacentBoxes[1] = adjacentBox2;
+    }
+    
+
     /**
      * Get the value of lineId
      *
@@ -44,24 +50,60 @@ public class Line {
     }
 
     /**
-     * Set the value of owner
+     * Set the owner of this line.
+     * The Boxes adjacent to this line are notified about this change.
      *
      * @param owner new value of owner
      */
     public void setOwner(Player owner) {
         this.owner = owner;
+        
+        for(Box box : adjacentBoxes) {
+            if(box != null) {
+                box.addLine(owner);
+            }
+        }
     }
     
 
     /**
-     * Get the value of adjacentBoxes
+     * Get the adjacent Boxes
      *
-     * @return the value of adjacentBoxes
+     * @return the adjacent Boxes
      */
     public Box[] getAdjacentBoxes() {
         return adjacentBoxes;
     }
+    
+    /**
+     * get the row this line lies in the grid.
+     * @return the row this line lies in the grid.
+     */
+    public int getRow() {
+        return lineId & 0xFFFF;
+    }
+    
+    /**
+     * get the column this line lies in the grid.
+     * @return the column this line lies in the grid.
+     */
+    public int getColumn() {
+        return (lineId >> 16) & 0xFFFF;
+    }
 
-
-
+    /**
+     * wheter the line is a horizontal line or not
+     * @return true if the line is horizontal
+     */
+    public boolean isHorizontal() {
+        return getRow() % 2 == 0;
+    }
+    
+    /**
+     * wheter the line is a vertical line or not
+     * @return true if the line is vertical
+     */
+    public boolean isVertical() {
+        return !isHorizontal();
+    }
 }
