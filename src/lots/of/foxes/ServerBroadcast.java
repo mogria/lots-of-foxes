@@ -16,11 +16,12 @@ import java.net.UnknownHostException;
  */
 public class ServerBroadcast implements Runnable{
     private static final String DISCOVER_MESSAGE = "LOF_DISCOVER";
+    private static final int BYTE_DATA_SIZE = 1024;
     
     Thread thread;
     private int port;
-    private byte[] sendData = new byte[1024];
-    private byte[] receiveData = new byte[1024];
+    private byte[] sendData = new byte[BYTE_DATA_SIZE];
+    private byte[] receiveData = new byte[BYTE_DATA_SIZE];
     private InetAddress group;
     private InetAddress myIP;
     private DatagramPacket sendPacket;
