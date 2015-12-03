@@ -1,7 +1,8 @@
 package lots.of.foxes.model;
 
 /**
- *
+ * represents a line on the Board
+ * 
  * @author Moritz
  */
 public class Line {
@@ -26,6 +27,8 @@ public class Line {
     private Player owner = null;
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
+        if(adjacentBox1 == null && adjacentBox2 == null)
+            throw new IllegalArgumentException("a line must at least have 1 adjacent box");
         adjacentBoxes[0] = adjacentBox1;
         adjacentBoxes[1] = adjacentBox2;
     }
@@ -56,6 +59,9 @@ public class Line {
      * @param owner new value of owner
      */
     public void setOwner(Player owner) {
+        if(owner == null)
+            throw new IllegalArgumentException("cannot reset owner of a line");
+        
         this.owner = owner;
         
         for(Box box : adjacentBoxes) {
@@ -92,7 +98,7 @@ public class Line {
     }
 
     /**
-     * wheter the line is a horizontal line or not
+     * whether the line is a horizontal line or not
      * @return true if the line is horizontal
      */
     public boolean isHorizontal() {
@@ -100,7 +106,7 @@ public class Line {
     }
     
     /**
-     * wheter the line is a vertical line or not
+     * whether the line is a vertical line or not
      * @return true if the line is vertical
      */
     public boolean isVertical() {

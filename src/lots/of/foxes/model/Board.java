@@ -6,13 +6,52 @@ import java.util.HashMap;
 /**
  * Represents the game board.
  * 
+ * The coordinate system used on this board can be used the address Boxes
+ * as well as lines. There are also invalid coordinates, which would represent
+ * the dots on the board. Because points are not required to represent the game
+ * board, these are just invalid coordinates.
+ * 
+ * The layout of this grid looks like this for sizeX = 1, sizeY = 1:
+ * 
+ *        p(0,0) l(1,0) p(2,0) 
+ *           *------------*
+ *           |            |
+ *     l(0,1)|            |l(1,1)
+ *           |  b(1,1)    |
+ *           |            |
+ *           *------------*
+ *        p(0,2) l(1,2) p(2,2) 
+ * 
+ * the letters before the coordinates (x, y) say what kind of object it is:
+ *  
+ *  * b - it is a box
+ *  * l - it is a line
+ *  * p - is is a point (and not represented in this data model)
+ * 
  * @author Moritz
  */
 public class Board {
     
+    /**
+     * stores all Boxes on the board
+     * the key is generated out of the coordinates by genId()
+     */
     private HashMap<Integer, Box> boxes = new HashMap<>();
+    
+    /**
+     * stores all Lines on the board
+     * the key is generated out of the coordinates by genId()
+     */
     private HashMap<Integer, Line> lines = new HashMap<>();
+    
+    /**
+     * the size of the grid in the x dimension
+     */
     private int gridSizeX;
+    
+    /**
+     * the size of the grid in the y dimension
+     */
     private int gridSizeY;
     
     /**
@@ -120,6 +159,11 @@ public class Board {
      * @return true if successful, false if line is already played
      */
     public boolean playLine(Player player, int lineId) {
+        Line line = lines.get(lineId);
+        if(line == null) return false;
+        if(line.getOwner() != null) return false;
+        
         lines.get(lineId).setOwner(player);
+        return true;
     }
 }
