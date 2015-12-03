@@ -18,21 +18,24 @@ import java.util.ListIterator;
  */
 public class GameFinder implements Runnable{
     
-    private static final int BROADCAST_SLEEP_TIME = 1000;
+    private static final int BROADCAST_SLEEP_TIME = 1000; //Transmit broadcast every x mili-seconds
     private static final int GAME_TTL = 5;
+    private static final int BYTE_DATA_SIZE = 1024;
+    private static final String MULTICAST_IP = "203.0.113.0";
+    private static final String DISCOVER_MESSAGE = "LOF_DISCOVER";
     
     Thread thread;
     private int port;
-    private byte[] sendData = new byte[1024];
+    private byte[] sendData = new byte[BYTE_DATA_SIZE];
     private InetAddress group;
     private DatagramPacket sendPacket;
     private ArrayList<String> games = new ArrayList<>();
     
     public GameFinder(int port){
         this.port = port;
-        sendData = "LOF_DISCOVER".getBytes();
+        sendData = DISCOVER_MESSAGE.getBytes();
         try{
-            group = InetAddress.getByName("203.0.113.0");
+            group = InetAddress.getByName(MULTICAST_IP);
         }
         catch(UnknownHostException ex){
             System.out.println("Could not resolve Multicast-IP: " + ex);
@@ -64,7 +67,7 @@ public class GameFinder implements Runnable{
     public class AnswerHandler implements Runnable{
         
         private DatagramPacket receivePacket;
-        private byte[] receiveData = new byte[1024];
+        private byte[] receiveData = new byte[BYTE_DATA_SIZE];
         private DatagramSocket socket;
         
         public AnswerHandler(DatagramSocket socket){
