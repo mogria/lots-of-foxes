@@ -152,7 +152,7 @@ public class Board {
     }
     
     /**
-     * assign a line to a player
+     * assign a line to a player by lineId
      * if the line has already been played false is returned
      * @param player
      * @param lineId 
@@ -160,10 +160,29 @@ public class Board {
      */
     public boolean playLine(Player player, int lineId) {
         Line line = lines.get(lineId);
+        return playLine(player, line);
+    }
+    
+    /**
+     * assign a line to a player
+     * if the line has already been played false is returned
+     * @param player
+     * @param lineId 
+     * @return true if successful, false if line is already played
+     */
+    public boolean playLine(Player player, Line line) {
         if(line == null) return false;
         if(line.getOwner() != null) return false;
         
-        lines.get(lineId).setOwner(player);
+        line.setOwner(player);
         return true;
+    }
+    
+    /**
+     * whether all lines on the board are occupied
+     * @return true if all lines are used, false if not
+     */
+    public boolean isBoardFull() {
+        return lines.values().stream().allMatch(line -> line.getOwner() != null);
     }
 }
