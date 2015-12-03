@@ -21,7 +21,7 @@ public class GameFinder implements Runnable{
     private static final int BROADCAST_SLEEP_TIME = 1000; //Transmit broadcast every x mili-seconds
     private static final int GAME_TTL = 5;
     private static final int BYTE_DATA_SIZE = 1024;
-    private static final String MULTICAST_IP = "203.0.113.0";
+    private static final String MULTICAST_IP = "255.255.255.255";
     private static final String DISCOVER_MESSAGE = "LOF_DISCOVER";
     
     Thread thread;
@@ -50,6 +50,7 @@ public class GameFinder implements Runnable{
     @Override
     public void run() {
         try(DatagramSocket socket = new DatagramSocket(port)){
+            socket.setBroadcast(true);
             AnswerHandler answer = new AnswerHandler(socket);
             new Thread(answer).start();
             while(true){
@@ -60,6 +61,7 @@ public class GameFinder implements Runnable{
             }
         }
         catch(Exception ex){
+            ex.printStackTrace();
             System.out.println("Error while starting socket: " + ex);
         }
     }
@@ -80,8 +82,9 @@ public class GameFinder implements Runnable{
                 try {
                     System.out.println("Waiting for answer.");
                     socket.receive(receivePacket);
-                    addGame(receivePacket.toString());
+                    addGame(new String(receivePacket.getData()));
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                     System.out.println("Error while receiving UDP Packet: " + ex);
                 }
             }
