@@ -24,6 +24,8 @@ public class Player {
     private int boxCount = 0;
 
     public Player(String name, Color color) {
+        if(name == null) throw new IllegalArgumentException("name cannot be null");
+        if(color == null) throw new IllegalArgumentException("color cannot be null");
         this.name = name;
         this.color = color;
     }
@@ -60,4 +62,5 @@ public class Player {
     public void increaseBoxCount() {
         boxCount++;
     } 
+
 }

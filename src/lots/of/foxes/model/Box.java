@@ -15,7 +15,7 @@ public class Box {
     /**
      * the player which used the last line.
      */
-    private Player owner;
+    private Player owner = null;
 
     /**
      * Get the value of lineCount
