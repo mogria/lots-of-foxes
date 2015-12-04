@@ -22,9 +22,9 @@ public class Line extends GridElement implements Serializable{
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
         super(lineId);
-        if (adjacentBox1 == null && adjacentBox2 == null) {
+        /**if (adjacentBox1 == null && adjacentBox2 == null) {
             throw new IllegalArgumentException("a line must at least have 1 adjacent box");
-        }
+        }**/
         adjacentBoxes[0] = adjacentBox1;
         adjacentBoxes[1] = adjacentBox2;
     }
