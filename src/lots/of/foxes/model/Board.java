@@ -66,7 +66,8 @@ public class Board {
 
         for(int x = 0; x < sizeX; x++) {
             for(int y = 0; y < sizeY; y++) {
-                boxes.put(genId(x * 2 + 1, y * 2 + 1), new Box());
+                int id = genId(x * 2 + 1, y * 2 + 1);
+                boxes.put(id, new Box(id));
             }
         }
         

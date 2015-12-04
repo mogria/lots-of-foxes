@@ -29,6 +29,7 @@ public class Line {
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
         if(adjacentBox1 == null && adjacentBox2 == null)
             throw new IllegalArgumentException("a line must at least have 1 adjacent box");
+        this.lineId = lineId;
         adjacentBoxes[0] = adjacentBox1;
         adjacentBoxes[1] = adjacentBox2;
     }

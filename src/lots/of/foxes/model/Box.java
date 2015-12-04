@@ -8,6 +8,11 @@ package lots.of.foxes.model;
 public class Box {
     
     /**
+     * an unique id for this box
+     */
+    private int boxId;
+    
+    /**
      * the number of lines used around this box
      */
     private int lineCount = 0;
@@ -16,6 +21,10 @@ public class Box {
      * the player which used the last line.
      */
     private Player owner = null;
+    
+    public Box(int boxId) {
+        this.boxId = boxId;
+    }
 
     /**
      * Get the value of lineCount
@@ -48,5 +57,21 @@ public class Box {
             owner = player;
         }
             
+    }
+    
+    /**
+     * get the row this line lies in the grid.
+     * @return the row this line lies in the grid.
+     */
+    public int getRow() {
+        return boxId & 0xFFFF;
+    }
+    
+    /**
+     * get the column this line lies in the grid.
+     * @return the column this line lies in the grid.
+     */
+    public int getColumn() {
+        return (boxId >> 16) & 0xFFFF;
     }
 }
