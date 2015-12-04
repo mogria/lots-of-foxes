@@ -63,13 +63,10 @@ public class Board {
     public Board(int sizeX, int sizeY) {
         this.gridSizeX = sizeX * 2 + 1;
         this.gridSizeY = sizeY * 2 + 1;
-        for(int i = 0; i < sizeX * sizeY; i++) {
-            boxes.put(1 + i * 2, new Box());
-        }
-        
+
         for(int x = 0; x < sizeX; x++) {
             for(int y = 0; y < sizeY; y++) {
-                boxes.put(genId(sizeX * 2 + 1, sizeY * 2 + 1), new Box());
+                boxes.put(genId(x * 2 + 1, y * 2 + 1), new Box());
             }
         }
         
@@ -100,7 +97,7 @@ public class Board {
      * @return an unique id
      */
     private int genId(int x, int y) {
-        return (x & 0xFFFF) << 16 | y & 0xFFFF + 1;
+        return (x & 0xFFFF) << 16 | y & 0xFFFF;
     }
     
     /**
@@ -139,12 +136,30 @@ public class Board {
      * @param y the y coordinate
      * @return a Box object, null if x and y are not Box coordinates
      */
-    private Box getBoxByCoordinate(int x, int y) {
+    public Box getBoxByCoordinate(int x, int y) {
         return isBoxCoordinate(x, y) ? boxes.get(genId(x, y)) : null;
     }
     
     /**
-     * get all the line objects
+     * get a Line object by coordinates
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return a Box object, null if x and y are not Box coordinates
+     */
+    public Line getLineByCoordinate(int x, int y) {
+        return isLineCoordinate(x, y) ? lines.get(genId(x, y)) : null;
+    }
+    
+    /**
+     * get all the Box objects
+     * @return a Collection of Box objects
+     */
+    public Collection<Box> getBoxes() {
+        return boxes.values();
+    }
+    
+    /**
+     * get all the Line objects
      * @return all the lines object as a collection
      */
     public Collection<Line> getLines() {
