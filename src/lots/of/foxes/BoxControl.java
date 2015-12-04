@@ -46,12 +46,12 @@ public class BoxControl extends JPanel {
 
     @Override
     public int getHeight() {
-        return boxWidth - lineheight;
+        return boxWidth;
     }
 
     @Override
     public int getWidth() {
-        return boxWidth - lineheight;
+        return boxWidth;
     }
 
     private int calcX() {
@@ -59,15 +59,15 @@ public class BoxControl extends JPanel {
         int cntBoxes = box.getColumn() / 2;
         int cntLines = box.getColumn() - cntBoxes;
 
-        return (cntBoxes * boxWidth) + (cntLines+1 * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight);
 
     }
 
     private int calcY() {
         int cntBoxes = box.getRow() / 2;
-        int cntLines = box.getRow() - cntBoxes;
+        int cntLines = box.getRow() - cntBoxes ;
 
-        return (cntBoxes * boxWidth) + (cntLines+1 * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight);
     }
 
     @Override
@@ -81,6 +81,6 @@ public class BoxControl extends JPanel {
             g.setColor(box.getOwner().getColor());
         }
         g.setColor(Color.YELLOW);
-        g.fillRect(0, 0, boxWidth - lineheight, boxWidth - lineheight);
+        g.fillRect(0, 0, boxWidth, boxWidth );
     }
 }

@@ -37,6 +37,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
         this.boxes = boxes;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
+        this.setBackground(Color.BLACK);
 
         this.setPreferredSize(new Dimension(500, 500));
 
