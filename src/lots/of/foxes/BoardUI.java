@@ -11,30 +11,33 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Consumer;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Box;
 import lots.of.foxes.model.Line;
+import lots.of.foxes.model.Player;
 
 /**
  *
  * @author Adrian
  */
-public class BoardUI extends JPanel implements MouseListener {
+public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
-    ArrayList<Line> lines;
-    ArrayList<Box> boxes;
-    ArrayList<LineControl> linesControls;
-    ArrayList<BoxControl> boxControls;
+    Collection<Line> lines;
+    Collection<Box> boxes;
+    Collection<LineControl> linesControls;
+    Collection<BoxControl> boxControls;
+    Line lastClickedLine;
     int lineheight;
     int boxWidth;
 
-    public BoardUI(ArrayList<Line> lines, ArrayList<Box> boxes, int lineheight, int boxWidth) {
+    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int lineheight, int boxWidth) {
         this.lines = lines;
         this.boxes = boxes;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
-        
+
         this.setPreferredSize(new Dimension(500, 500));
 
         lines.stream().forEach((a) -> {
@@ -44,7 +47,6 @@ public class BoardUI extends JPanel implements MouseListener {
             boxControls.add(new BoxControl(a, lineheight, boxWidth));
         });
 
-        
         repaint();
         addMouseListener(this);
     }
@@ -61,16 +63,20 @@ public class BoardUI extends JPanel implements MouseListener {
         }
 
         if (l != null) {
-            //Line found do something
+            this.lastClickedLine = l;
         } else {
-            //Line not found Idiot
+            this.lastClickedLine = null;
         }
 
     }
 
+    public Line lastClickedLine() {
+        return this.lastClickedLine;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
-        
+
         linesControls.stream().forEach((lc) -> {
             lc.paintComponent(this.getGraphics());
         });
@@ -97,6 +103,21 @@ public class BoardUI extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void sendTurn(Line line) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Line receiveTurn() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Player getPlayer() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -5,9 +5,9 @@
  */
 package lots.of.foxes;
 
+import lots.of.foxes.model.LineDirection;
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Line;
 
@@ -35,7 +35,6 @@ public class LineControl extends JPanel {
         this.line = line;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
-        this.lineDirection = line.getRow() % 2 == 0 ? LineDirection.Vertical : LineDirection.Horizontal;
     }
 
     /**
@@ -86,7 +85,7 @@ public class LineControl extends JPanel {
             g.setColor(line.getOwner().getColor());
         }
 
-        g.drawRect(calcX(), calcY(), this.lineDirection == LineDirection.Horizontal ? boxWidth : lineheight, this.lineDirection == LineDirection.Horizontal ? lineheight : boxWidth);
+        g.drawRect(calcX(), calcY(), line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, this.lineDirection == LineDirection.Horizontal ? lineheight : boxWidth);
 
     }
 
