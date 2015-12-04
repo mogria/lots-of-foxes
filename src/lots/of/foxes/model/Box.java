@@ -1,12 +1,12 @@
 package lots.of.foxes.model;
 
+
 /**
  * Represents a single box on the Board
  * 
  * @author Moritz
  */
-public class Box extends GridElement {
-
+public class Box extends GridElement { 
     /**
      * the number of lines used around this box
      */

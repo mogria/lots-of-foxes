@@ -6,7 +6,7 @@ import java.awt.Color;
  *
  * @author Moritz
  */
-public class Player {
+public class Player{
        
     /**
      * name of the player
