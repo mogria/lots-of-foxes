@@ -103,10 +103,6 @@ public class LineControl extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        if (line == null) {
-            return;
-        }
-
         super.paint(g);
 
         if (isBrick()) {
