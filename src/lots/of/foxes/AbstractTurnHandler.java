@@ -39,4 +39,5 @@ public abstract class AbstractTurnHandler implements ITurnHandler {
     public Player getPlayer() {
         return player;
     }
+    
 }
