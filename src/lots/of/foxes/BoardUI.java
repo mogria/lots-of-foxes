@@ -26,8 +26,8 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
     Collection<Line> lines;
     Collection<Box> boxes;
-    Collection<LineControl> linesControls = new ArrayList<LineControl>();
-    Collection<BoxControl> boxControls = new ArrayList<BoxControl>();;
+    Collection<LineControl> linesControls = new ArrayList<>();
+    Collection<BoxControl> boxControls = new ArrayList<>();;
     Line lastClickedLine;
     int lineheight;
     int boxWidth;

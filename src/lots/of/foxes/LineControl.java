@@ -27,10 +27,6 @@ public class LineControl extends JPanel {
      * Dimension of the box
      */
     int boxWidth;
-    /**
-     * Direction of the Line
-     */
-    LineDirection lineDirection;
 
     public LineControl(Line line, int lineheight, int boxWidth) {
         this.line = line;
@@ -52,7 +48,12 @@ public class LineControl extends JPanel {
      */
     private int calcX() {
 
-        int cntLines = line.getColumn() - (Math.round(line.getColumn() / 2));
+        int row = line.getRow();
+        int column = line.getColumn();
+        int cntLines = line.getColumn() - (int)(Math.ceil((line.getColumn() / 2.0)));
+     
+        int temp = ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+
         return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
     }
 
@@ -88,12 +89,12 @@ public class LineControl extends JPanel {
     @Override
     public Dimension getSize() {
 
-        return new Dimension(line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, this.lineDirection == LineDirection.Horizontal ? lineheight : boxWidth);
+        return new Dimension(line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
     }
 
     @Override
     public int getHeight() {
-        return this.lineDirection == LineDirection.Horizontal ? lineheight : boxWidth;
+        return line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
     }
 
     @Override
@@ -105,16 +106,14 @@ public class LineControl extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         LineDirection ld = line.getDirection();
-        int lineid = line.getLineId();
+
         int row = line.getRow();
         int column = line.getColumn();
       //  int width = line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight;
-       // int height = line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
+        // int height = line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
         int x = this.getX();
         int y = this.getY();
-        
-        
-        
+
         if (isBrick()) {
             g.setColor(Color.black);
             g.drawRect(calcX(), calcY(), lineheight, lineheight);
@@ -124,7 +123,7 @@ public class LineControl extends JPanel {
             g.setColor(line.getOwner().getColor());
         }
         g.setColor(Color.red);
-        g.drawRect(0, 0, line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
+        g.fillRect(0, 0, line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
 
     }
 

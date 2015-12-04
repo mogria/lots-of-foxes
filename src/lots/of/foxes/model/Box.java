@@ -5,8 +5,8 @@ package lots.of.foxes.model;
  * 
  * @author Moritz
  */
-public class Box {
-    
+public class Box extends GridElement {
+
     /**
      * an unique id for this box
      */
@@ -23,7 +23,7 @@ public class Box {
     private Player owner = null;
     
     public Box(int boxId) {
-        this.boxId = boxId;
+        super(boxId);
     }
 
     /**

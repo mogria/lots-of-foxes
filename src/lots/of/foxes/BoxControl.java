@@ -5,6 +5,7 @@
  */
 package lots.of.foxes;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
@@ -44,12 +45,12 @@ public class BoxControl extends JPanel {
 
     @Override
     public int getHeight() {
-        return boxWidth - lineheight;
+        return 40;// boxWidth - lineheight;
     }
 
     @Override
     public int getWidth() {
-        return boxWidth - lineheight;
+        return 40;//boxWidth - lineheight;
     }
 
     private int calcX() {
@@ -70,6 +71,7 @@ public class BoxControl extends JPanel {
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
         }
-        g.drawRect(0, 0, boxWidth - lineheight, boxWidth - lineheight);
+        g.setColor(Color.YELLOW);
+        g.fillRect(0, 0, boxWidth - lineheight, boxWidth - lineheight);
     }
 }
