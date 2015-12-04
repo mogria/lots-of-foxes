@@ -5,6 +5,7 @@
  */
 package lots.of.foxes;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -20,27 +21,55 @@ public class BoxControl extends JPanel {
     int lineheight;
     int boxWidth;
 
-    public BoxControl(Box line, int lineheight, int boxWidth) {
+    public BoxControl(Box box, int lineheight, int boxWidth) {
         this.box = box;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
     }
 
-    private int calcX() {
-        
-        return 0;
-    }
-
-    private int calcY() {
-        return 0;
+    @Override
+    public int getX() {
+        return calcX();
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        
+    public int getY() {
+        return calcY();
+    }
+
+    @Override
+    public Dimension getSize() {
+        return new Dimension(boxWidth - lineheight, boxWidth - lineheight);
+    }
+
+    @Override
+    public int getHeight() {
+        return boxWidth - lineheight;
+    }
+
+    @Override
+    public int getWidth() {
+        return boxWidth - lineheight;
+    }
+
+    private int calcX() {
+
+        int cntLines = box.getColumn() - (Math.round(box.getColumn() / 2));
+        return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+
+    }
+
+    private int calcY() {
+        int cntLines = box.getRow() - (Math.round(box.getRow() / 2));
+        return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
-        }        
-        g.drawRect(calcX(), calcY(), boxWidth - lineheight, boxWidth - lineheight);
+        }
+        g.drawRect(0, 0, boxWidth - lineheight, boxWidth - lineheight);
     }
 }
