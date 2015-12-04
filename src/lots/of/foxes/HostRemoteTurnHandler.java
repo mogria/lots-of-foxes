@@ -5,29 +5,53 @@
  */
 package lots.of.foxes;
 
-import java.awt.Color;
-import lots.of.foxes.model.Line;
+import java.io.IOException;
+import java.net.ServerSocket;
+import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Player;
 
 /**
  *
  * @author Diego
  */
-public class HostRemoteTurnHandler implements ITurnHandler {
+public class HostRemoteTurnHandler extends NetworkTurnHandler {
 
-    @Override
-    public Player getPlayer() {
-        return new Player("Homo", Color.yellow);
+    /**
+     * Server socket, used to host the connection
+     */
+    private ServerSocket serverSocket;
+
+    /**
+     * The constructor builts the server socket and waits for the connection try of the client.
+     * 
+     * @param port
+     * @param board
+     * @param player 
+     */
+    public HostRemoteTurnHandler(int port, Board board, Player player) {
+        super(board, player);
+        this.portNumber = port;
+        try{
+            serverSocket = new ServerSocket(this.portNumber);
+            System.out.println("Server startet.");
+            clientSocket = serverSocket.accept();
+            System.out.println("Connection established.");
+        }
+        catch(IOException e){
+            System.out.println("Exception occured: " + e.getMessage());
+        }
     }
 
-    @Override
-    public void sendTurn(Line line) {
-        
-    }
-
-    @Override
-    public Line receiveTurn() {
-        return new Line(1, null, null);
+    /**
+     * Method to close the connection to the client
+     */
+    public void closeConnection(){
+        try {
+            clientSocket.close();
+            serverSocket.close();
+        } catch (IOException ex) {
+            System.out.println("Failed while closing sockets: " + ex);
+        }
     }
 
 }
