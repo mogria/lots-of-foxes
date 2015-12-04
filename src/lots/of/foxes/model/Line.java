@@ -5,13 +5,7 @@ package lots.of.foxes.model;
  * 
  * @author Moritz
  */
-public class Line {
-    
-    /**
-     * unique id of this line
-     */
-    private int lineId;
-    
+public class Line extends GridElement {
     
     /**
      * boxes adjacent to this line
@@ -27,23 +21,13 @@ public class Line {
     private Player owner = null;
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
+        super(lineId);
         if(adjacentBox1 == null && adjacentBox2 == null)
             throw new IllegalArgumentException("a line must at least have 1 adjacent box");
-        this.lineId = lineId;
         adjacentBoxes[0] = adjacentBox1;
         adjacentBoxes[1] = adjacentBox2;
     }
     
-
-    /**
-     * Get the value of lineId
-     *
-     * @return the value of lineId
-     */
-    public int getLineId() {
-        return lineId;
-    }
-
     /**
      * Get the value of owner
      *
@@ -80,22 +64,6 @@ public class Line {
      */
     public Box[] getAdjacentBoxes() {
         return adjacentBoxes;
-    }
-    
-    /**
-     * get the row this line lies in the grid.
-     * @return the row this line lies in the grid.
-     */
-    public int getRow() {
-        return lineId & 0xFFFF;
-    }
-    
-    /**
-     * get the column this line lies in the grid.
-     * @return the column this line lies in the grid.
-     */
-    public int getColumn() {
-        return (lineId >> 16) & 0xFFFF;
     }
 
     /**

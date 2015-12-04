@@ -63,11 +63,11 @@ public class Board {
     public Board(int sizeX, int sizeY) {
         this.gridSizeX = sizeX * 2 + 1;
         this.gridSizeY = sizeY * 2 + 1;
-
+        
         for(int x = 0; x < sizeX; x++) {
             for(int y = 0; y < sizeY; y++) {
-                int id = genId(x * 2 + 1, y * 2 + 1);
-                boxes.put(id, new Box(id));
+                Box box = new Box(genId(x * 2 + 1, y * 2 + 1));
+                boxes.put(box.getId(), box);
             }
         }
         
@@ -85,7 +85,7 @@ public class Board {
                         box2 = getBoxByCoordinate(x + 1, y);
                     }
                     Line line = new Line(genId(x, y), box1, box2);
-                    lines.put(line.getLineId(), line);
+                    lines.put(line.getId(), line);
                 }
             }
         }
