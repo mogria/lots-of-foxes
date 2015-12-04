@@ -1,22 +1,24 @@
 package lots.of.foxes.model;
 
+import java.io.Serializable;
+
 /**
  * represents a line on the Board
  *
  * @author Moritz
  */
-public class Line extends GridElement {
+public class Line extends GridElement implements Serializable{
 
     /**
      * boxes adjacent to this line if this line is at the border of the Board,
      * it only has 1 adjacent box, else it always has 2;
      */
-    private Box[] adjacentBoxes = new Box[2];
+    private transient Box[] adjacentBoxes = new Box[2];
 
     /**
      * the player who drew this line. null if the line is not yet drewn
      */
-    private Player owner = null;
+    private transient Player owner = null;
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
         super(lineId);

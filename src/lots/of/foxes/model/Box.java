@@ -1,5 +1,6 @@
 package lots.of.foxes.model;
 
+
 /**
  * Represents a single box on the Board
  * 
