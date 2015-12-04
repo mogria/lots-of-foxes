@@ -1,10 +1,12 @@
 package lots.of.foxes.model;
 
+import java.io.Serializable;
+
 /**
  * Represents an element in the Grid.
  * @author Moritz
  */
-public class GridElement {
+public class GridElement implements Serializable{
     /**
      * the unique id of this GridElement
      */
