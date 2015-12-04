@@ -21,7 +21,7 @@ public class BoardUITest extends JFrame {
     public BoardUITest() throws HeadlessException {
         this.setSize(1000, 1000);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        Board b = new Board(1, 1);
+        Board b = new Board(5, 5);
 
         BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(), 10, 50);
         bui.setVisible(true);

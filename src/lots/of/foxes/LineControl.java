@@ -48,13 +48,10 @@ public class LineControl extends JPanel {
      */
     private int calcX() {
 
-        int row = line.getRow();
-        int column = line.getColumn();
-        int cntLines = line.getColumn() - (int)(Math.ceil((line.getColumn() / 2.0)));
-     
-        int temp = ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+        int cntBoxes = line.getColumn() / 2;
+        int cntLines = line.getColumn() - cntBoxes;
 
-        return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight);
     }
 
     /**
@@ -63,8 +60,10 @@ public class LineControl extends JPanel {
      * @return Y value
      */
     private int calcY() {
-        int cntLines = line.getRow() - (Math.round(line.getRow() / 2));
-        return ((cntLines) * lineheight) + (boxWidth * cntLines);
+        int cntBoxes = line.getRow() / 2;
+        int cntLines = line.getRow() - cntBoxes;
+
+        return (cntBoxes * boxWidth) + (cntLines * lineheight);
     }
 
     /**
@@ -109,8 +108,8 @@ public class LineControl extends JPanel {
 
         int row = line.getRow();
         int column = line.getColumn();
-      //  int width = line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight;
-        // int height = line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
+        int width = line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight;
+        int height = line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
         int x = this.getX();
         int y = this.getY();
 

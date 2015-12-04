@@ -84,6 +84,6 @@ public class Line extends GridElement {
     }
 
     public LineDirection getDirection() {
-        return this.getRow() % 2 == 0 ? LineDirection.Vertical : LineDirection.Horizontal;
+        return this.getRow() % 2 == 0 ? LineDirection.Horizontal : LineDirection.Vertical;
     }
 }

@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Box;
+import lots.of.foxes.model.LineDirection;
 
 /**
  *
@@ -45,29 +46,37 @@ public class BoxControl extends JPanel {
 
     @Override
     public int getHeight() {
-        return 40;// boxWidth - lineheight;
+        return boxWidth - lineheight;
     }
 
     @Override
     public int getWidth() {
-        return 40;//boxWidth - lineheight;
+        return boxWidth - lineheight;
     }
 
     private int calcX() {
 
-        int cntLines = box.getColumn() - (Math.round(box.getColumn() / 2));
-        return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+        int cntBoxes = box.getColumn() / 2;
+        int cntLines = box.getColumn() - cntBoxes;
+
+        return (cntBoxes * boxWidth) + (cntLines+1 * lineheight);
 
     }
 
     private int calcY() {
-        int cntLines = box.getRow() - (Math.round(box.getRow() / 2));
-        return ((cntLines + 1) * lineheight) + (boxWidth * cntLines);
+        int cntBoxes = box.getRow() / 2;
+        int cntLines = box.getRow() - cntBoxes;
+
+        return (cntBoxes * boxWidth) + (cntLines+1 * lineheight);
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        int row = box.getRow();
+        int column = box.getColumn();
+        int x = this.getX();
+        int y = this.getY();
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
         }
