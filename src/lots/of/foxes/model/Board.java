@@ -168,6 +168,22 @@ public class Board {
     }
     
     /**
+     * returns the grid size in the x dimension
+     * @return the grid size in the x dimension
+     */
+    public int getGridSizeX() {
+        return gridSizeX;
+    }
+
+    /**
+     * returns the grid size in the y dimension
+     * @return the grid size in the y dimension
+     */
+    public int getGridSizeY() {
+        return gridSizeY;
+    }
+    
+    /**
      * assign a line to a player by lineId
      * if the line has already been played false is returned
      * @param player
