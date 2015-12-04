@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  * The Class GameFinder sends Broadcasts every second to the local network to notify game servers. The embedded class AnswerHandler waits for the answers of every server.
@@ -32,7 +33,7 @@ public class GameFinder implements Runnable{
     private byte[] sendData = new byte[BYTE_DATA_SIZE]; //data of the UDP packet
     private InetAddress broadcastIP; //IP variable
     private DatagramPacket sendPacket; //Packet to send
-    private ArrayList<String> games = new ArrayList<>(); //list of available games
+    private ArrayList<RemoteGameConfig> games = new ArrayList<>(); //list of available games
     // Entry structure: RESPONSE_MESSAGE;name of the game;version of the application;size of the gamefield;IP of the server;time to live
     private DatagramSocket socket; //Datagram socket for UDP communication
     
@@ -121,33 +122,29 @@ public class GameFinder implements Runnable{
      * 
      * @param game 
      */
-    public synchronized void addGame(String game){
-        ListIterator<String> itr = games.listIterator();
-        boolean newGame = true;
-        String currentEntry;
-        String currentGame;
-        int ttl;
+    public synchronized void addGame(String gameString){
+        
+        String[] gameInfo = gameString.split(";");
+        // gameName;gameVersion;sizeX;sizeY;serverIP
+        RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3]), Integer.parseInt(gameInfo[4]), gameInfo[5]);
+        boolean isNewGame = true;
         
         //if the list is empty, the new game can just be added without checkin, if it's already exists.
+        ListIterator<RemoteGameConfig> itr = games.listIterator();
         if(!games.isEmpty()){
             while(itr.hasNext()){
-                currentEntry = itr.next();
-                //ttl is safed at the last position of the game entry and only one char. 
-                ttl = Integer.parseInt("" + currentEntry.charAt
-                        (currentEntry.length()-1));
-                //currentGame is the entry without the ttl field
-                currentGame = currentEntry.substring(0, (currentEntry.length()-2));
+                RemoteGameConfig currentGame = itr.next();
                 
-                //if the current entry is the same as the given game, the entry will be updated and ttl will be reseted.
-                if(currentGame.equals(game)){
-                    itr.set(currentGame + ";0");
-                    newGame = false;
+                if(!currentGame.getServerIP().equals(newGame.getServerIP())){
+                    currentGame.setTtl(0);
+                    itr.set(currentGame);
+                    isNewGame = false;
                 }
             }
         }
         //if newGame is true, the game will be added at the end of the ArrayList games.
-        if(newGame){
-            games.add(game + ";0");
+        if(isNewGame){
+            games.add(newGame);
         }
     }
     
@@ -155,27 +152,24 @@ public class GameFinder implements Runnable{
      * This method loops the ArrayList games and increments the ttl field.
      */
     public synchronized void updateList(){
-        ListIterator<String> itr = games.listIterator();
-        String currentEntry;
-        String currentGame;
+        ListIterator<RemoteGameConfig> itr = games.listIterator();
         int ttl;
         
         if(!games.isEmpty()){
             while(itr.hasNext()){
-                currentEntry = itr.next();
+                RemoteGameConfig currentGame = itr.next();
                 //ttl is safed at the last position of the game entry and only one char. 
-                ttl = Integer.parseInt("" + currentEntry.charAt
-                        (currentEntry.length()-1));
-                //currentGame is the entry without the ttl field
-                currentGame = currentEntry.substring(0, (currentEntry.length()-2));
-                System.out.println(currentEntry);
+                ttl = currentGame.getTtl();
+                
+                System.out.println(currentGame);
                 
                 //if ttl reached the MAX ttl, the entry will be deleted
                 if(ttl >= GAME_TTL){
                     itr.remove();
                 }
                 else{
-                    itr.set(currentGame + ";" + (ttl+1));
+                    currentGame.setTtl(ttl+1);
+                    itr.set(currentGame);
                 }
             }
         }
@@ -184,7 +178,7 @@ public class GameFinder implements Runnable{
     /**
      * @return List of games
      */
-    public ArrayList<String> getGames() {
+    public ArrayList<RemoteGameConfig> getGames() {
         return games;
     }
     

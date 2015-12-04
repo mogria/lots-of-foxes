@@ -1,5 +1,6 @@
 package lots.of.foxes.model;
 
+import java.util.Objects;
 import lots.of.foxes.GameType;
 
 /**
@@ -136,5 +137,4 @@ public class GameConfig {
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }
-    
 }
