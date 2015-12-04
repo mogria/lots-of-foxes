@@ -27,7 +27,8 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     Collection<Line> lines;
     Collection<Box> boxes;
     Collection<LineControl> linesControls = new ArrayList<>();
-    Collection<BoxControl> boxControls = new ArrayList<>();;
+    Collection<BoxControl> boxControls = new ArrayList<>();
+    
     Line lastClickedLine;
     int lineheight;
     int boxWidth;
@@ -46,14 +47,14 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
             linesControls.add(lc);
             this.add(lc);
         }
-        
+
         for (Box b : boxes) {
             BoxControl bc = new BoxControl(b, lineheight, boxWidth);
             boxControls.add(bc);
             this.add(bc);
         }
 
-       // repaint();
+       
         addMouseListener(this);
     }
 
@@ -82,6 +83,11 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
     @Override
     public void paint(Graphics g) {
+
+        if (linesControls.isEmpty() || boxControls.isEmpty()) {
+            return;
+        }
+
         super.paint(g);
         linesControls.stream().forEach((lc) -> {
             lc.paint(this.getGraphics());
@@ -89,7 +95,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
         boxControls.stream().forEach((bc) -> {
             bc.paint(this.getGraphics());
         });
-        
+
     }
 
     @Override

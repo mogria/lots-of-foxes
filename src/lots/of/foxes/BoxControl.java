@@ -65,22 +65,22 @@ public class BoxControl extends JPanel {
 
     private int calcY() {
         int cntBoxes = box.getRow() / 2;
-        int cntLines = box.getRow() - cntBoxes ;
+        int cntLines = box.getRow() - cntBoxes;
 
         return (cntBoxes * boxWidth) + (cntLines * lineheight);
     }
 
     @Override
     public void paint(Graphics g) {
+        if (box == null) {
+            return;
+        }
         super.paint(g);
-        int row = box.getRow();
-        int column = box.getColumn();
-        int x = this.getX();
-        int y = this.getY();
+
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
         }
         g.setColor(Color.YELLOW);
-        g.fillRect(0, 0, boxWidth, boxWidth );
+        g.fillRect(0, 0, boxWidth, boxWidth);
     }
 }

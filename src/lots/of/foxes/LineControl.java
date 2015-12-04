@@ -103,15 +103,11 @@ public class LineControl extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
-        LineDirection ld = line.getDirection();
+        if (line == null) {
+            return;
+        }
 
-        int row = line.getRow();
-        int column = line.getColumn();
-        int width = line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight;
-        int height = line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
-        int x = this.getX();
-        int y = this.getY();
+        super.paint(g);
 
         if (isBrick()) {
             g.setColor(Color.black);
