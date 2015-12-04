@@ -126,4 +126,12 @@ public class SaveFile {
             throw new IOException("could not read board", ex);
         }
     }
+    
+    /**
+     * Delete a save file.
+     * @return true if the save file could be deleted, false if not
+     */
+    public boolean delete() {
+        return file.delete();
+    }
 }
