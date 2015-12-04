@@ -21,6 +21,17 @@ public class GameConfig {
      * name of the game that appears in the server list
      */
     private String gameName;
+    
+    /**
+     * whether you can play first
+     */
+    private boolean doIStartFirst;
+    
+    /**
+     * the type of this game
+     */
+    private GameType gameType;
+
 
     /**
      * Get the value of boardSizeX
@@ -74,6 +85,42 @@ public class GameConfig {
      */
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    /**
+     * Get the value of doIStartFirst
+     * 
+     * @return the value of doIStartFirst
+     */
+    public boolean getDoIStartFirst() {
+        return doIStartFirst;
+    }
+
+    /**
+     * Set the value of doIStartFirst
+     * 
+     * @param doIStartFirst 
+     */
+    public void setDoIStartFirst(boolean doIStartFirst) {
+        this.doIStartFirst = doIStartFirst;
+    }
+    
+    /**
+     * Get the value of gameType
+     * 
+     * @return the value of gameType
+     */
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    /**
+     * Set the value of gameType
+     * 
+     * @param gameType 
+     */
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
     
 }
