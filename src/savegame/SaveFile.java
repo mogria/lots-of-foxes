@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lots.of.foxes.GameConfig;
+import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.Board;
 
 /**
