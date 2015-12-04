@@ -5,13 +5,7 @@ package lots.of.foxes.model;
  * 
  * @author Moritz
  */
-public class Box extends GridElement {
-
-    /**
-     * an unique id for this box
-     */
-    private int boxId;
-    
+public class Box extends GridElement { 
     /**
      * the number of lines used around this box
      */
@@ -57,21 +51,5 @@ public class Box extends GridElement {
             owner = player;
         }
             
-    }
-    
-    /**
-     * get the row this line lies in the grid.
-     * @return the row this line lies in the grid.
-     */
-    public int getRow() {
-        return boxId & 0xFFFF;
-    }
-    
-    /**
-     * get the column this line lies in the grid.
-     * @return the column this line lies in the grid.
-     */
-    public int getColumn() {
-        return (boxId >> 16) & 0xFFFF;
     }
 }
