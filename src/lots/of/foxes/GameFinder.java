@@ -181,6 +181,14 @@ public class GameFinder implements Runnable{
         }
     }
     
+    /**
+     * @return List of games
+     */
+    public ArrayList<String> getGames() {
+        return games;
+    }
+    
+    
     public static void main(String[] args) {
         GameFinder testFinder = new GameFinder(6969);
     }
