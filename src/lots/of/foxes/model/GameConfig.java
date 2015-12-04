@@ -1,4 +1,6 @@
-package lots.of.foxes;
+package lots.of.foxes.model;
+
+import lots.of.foxes.GameType;
 
 /**
  * Stores the configuration for a Game
@@ -32,7 +34,19 @@ public class GameConfig {
      */
     private GameType gameType;
 
-
+    /**
+     * constructor
+     * 
+     * @param boardSizeX
+     * @param boardSizeY
+     * @param gameName 
+     */
+    public GameConfig(int boardSizeX, int boardSizeY, String gameName) {
+        this.boardSizeX = boardSizeX;
+        this.boardSizeY = boardSizeY;
+        this.gameName = gameName;
+    }
+    
     /**
      * Get the value of boardSizeX
      *

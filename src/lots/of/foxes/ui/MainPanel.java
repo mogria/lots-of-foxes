@@ -5,9 +5,12 @@
  */
 package lots.of.foxes.ui;
 
+import com.sun.rowset.internal.Row;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,7 +26,7 @@ public class MainPanel extends JPanel implements Runnable{
     
     private static final int GF_PORT = 6969;
     
-    DefaultTableModel dfm;
+    DefaultTableModel dtm;
     Thread thread;
     GameFinder gf;
     
@@ -47,7 +50,14 @@ public class MainPanel extends JPanel implements Runnable{
     public void run(){
         gf = new GameFinder(GF_PORT);
         while(true){
+            try {
+                thread.sleep(300);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // TODO: add Games to table
+            //for(String gf.getGames()
         }
     }
     
@@ -72,14 +82,14 @@ public class MainPanel extends JPanel implements Runnable{
                                 "Version",
                                 "Join"};
         
-        dfm = new DefaultTableModel(columnNames, 0){
+        dtm = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                return false;
             }
         };
         
-        JTable gameTable = new JTable(dfm);
+        JTable gameTable = new JTable(dtm);
                 
         return new JScrollPane(gameTable);
     }
