@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lots.of.foxes.model;
 
 import java.awt.Color;
@@ -15,8 +10,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author mogria
+ * Test suite for the Board model.
+ * 
+ * @author Moritz
  */
 public class BoardTest {
     
@@ -27,7 +23,7 @@ public class BoardTest {
     /**
      * list of all valid line coordinates for lines on a 3x2 board
      */
-    private int[][] validLineCoordinates = new int[][]{
+    private final int[][] validLineCoordinates = new int[][]{
         {1, 0},
         {3, 0},
         {5, 0},
@@ -50,7 +46,7 @@ public class BoardTest {
     /**
      * list of all valid box coordinates for lines on a 3x2 board
      */
-    private int[][] validBoxCoordinates = new int[][]{
+    private final int[][] validBoxCoordinates = new int[][]{
         {1, 1},
         {3, 1},
         {5, 1},

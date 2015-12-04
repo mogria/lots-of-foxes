@@ -34,7 +34,7 @@ public class ClientRemoteTurnHandlerTest {
     Box box7;
     Box box8;
     InetAddress ip;
-    String testIP = "192.168.1.1";
+    String testIP = "192.168.43.153";
     
     public ClientRemoteTurnHandlerTest() {
         try{

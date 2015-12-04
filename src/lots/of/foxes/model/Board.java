@@ -1,5 +1,6 @@
 package lots.of.foxes.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -30,7 +31,7 @@ import java.util.HashMap;
  * 
  * @author Moritz
  */
-public class Board {
+public class Board implements Serializable {
     
     /**
      * stores all Boxes on the board
