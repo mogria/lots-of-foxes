@@ -5,6 +5,8 @@
  */
 package lots.of.foxes.model;
 
+import java.util.Objects;
+
 /**
  * Represents a Game for the broadcast/discovery and game list/join functionality
  * @author Marcel
@@ -27,15 +29,24 @@ public class RemoteGameConfig extends GameConfig{
     private int ttl;
     
     /**
-     * Constructor which sets all attributes except ttl
-     * @param name
+     * Constructor
+     * 
      * @param boardSizeX
      * @param boardSizeY
-     * @param gameVersion 
+     * @param gameName
+     * @param gameVersion
+     * @param serverIP
      */
-    public RemoteGameConfig(String name, int boardSizeX, int boardSizeY, String gameName, String gameVersion){
+    public RemoteGameConfig(String gameName, String gameVersion, int boardSizeX, int boardSizeY, String serverIP){
         super(boardSizeX, boardSizeY, gameName);
         this.gameVersion = gameVersion;
+        this.serverIP = serverIP;
+        this.ttl = 0;
+    }
+
+    @Override
+    public String toString() {
+        return getGameName() + " - " + getServerIP() + " - " + getTtl();
     }
     
     public String getGameVersion() {
