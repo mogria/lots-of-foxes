@@ -1,11 +1,13 @@
 package lots.of.foxes.model;
 
+import java.io.Serializable;
+
 /**
  * represents a line on the Board
  *
  * @author Moritz
  */
-public class Line extends GridElement {
+public class Line extends GridElement implements Serializable{
 
     /**
      * boxes adjacent to this line if this line is at the border of the Board,
