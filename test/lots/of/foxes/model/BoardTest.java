@@ -23,9 +23,13 @@ import static org.junit.Assert.*;
  */
 public class BoardTest {
     
+    
     private Board board;
     private Player player;
-    
+
+    /**
+     * list of all valid line coordinates for lines on a 3x2 board
+     */
     private int[][] validLineCoordinates = new int[][]{
         {1, 0},
         {3, 0},
@@ -43,28 +47,26 @@ public class BoardTest {
         {6, 3},
         {1, 4},
         {3, 4},
-        {5, 4},
-        {0, 5},
-        {2, 5},
-        {4, 5},
-        {6, 5},
+        {5, 4}
     };
-    
+
+    /**
+     * list of all valid box coordinates for lines on a 3x2 board
+     */
     private int[][] validBoxCoordinates = new int[][]{
         {1, 1},
         {3, 1},
         {5, 1},
         {1, 3},
         {3, 3},
-        {5, 3},
-    };
-    
+        {5, 3},};
+
     @Before
     public void setUp() {
         board = new Board(3, 2);
         player = new Player("TestPlayer", Color.BLACK);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -76,18 +78,17 @@ public class BoardTest {
     public void testGetLines() {
         System.out.println("getLines");
         Collection<Line> lines = board.getLines();
-        
+
         assertEquals((3 * 2) * 2 + 3 + 2, lines.size());
-        
+
         lines.stream().forEach(line -> {
             assertTrue(
-                Arrays.stream(validLineCoordinates).anyMatch(coords -> coords[0] == line.getColumn()
-                                                                    && coords[1] == line.getRow())
+                    Arrays.stream(validLineCoordinates).anyMatch(coords -> coords[0] == line.getColumn()
+                            && coords[1] == line.getRow())
             );
         });
     }
-    
-    
+
     /**
      * Test of getBoxes method, of class Board.
      */
@@ -95,7 +96,7 @@ public class BoardTest {
     public void testGetBoxes() {
         System.out.println("getBoxes");
         Collection<Box> lines = board.getBoxes();
-        
+
         assertEquals((3 * 2), lines.size());
     }
 
@@ -106,9 +107,33 @@ public class BoardTest {
     public void testPlayLine() {
         System.out.println("playLine");
         Line line = board.getLines().stream().findAny().get();
-        boolean result = board.playLine(player, line.getLineId());
+        boolean result = board.playLine(player, line.getId());
         assertEquals(true, result);
         assertNotNull(line.getOwner());
+    }
+    
+    /**
+     * Test of playLine method, of class Board.
+     */
+    @Test
+    public void testPlayAllLinesForABox() {
+        System.out.println("playLine");
+        Line[] lines = {
+            board.getLineByCoordinate(0, 1),
+            board.getLineByCoordinate(1, 0),
+            board.getLineByCoordinate(2, 1),
+            board.getLineByCoordinate(1, 2)
+        };
+        
+        Arrays.stream(lines).forEach(line -> {
+            assertEquals(true, board.playLine(player, line.getId()));
+            assertNotNull(line.getOwner());
+        });
+        
+        Box box = Arrays.stream(lines[0].getAdjacentBoxes())
+                .filter(line -> line != null)
+                .findFirst().get();
+        box.getOwner();
     }
 
     /**
@@ -126,7 +151,7 @@ public class BoardTest {
         board.getLines().stream().filter(line -> line.getOwner() != null).forEach(line -> {
             board.playLine(player, line);
         });
-        
+
         assertEquals(false, board.isBoardFull());
     }
 
@@ -136,14 +161,13 @@ public class BoardTest {
     @Test
     public void testGetBoxByCoordinate() {
         System.out.println("getBoxByCoordinate");
-        int x = 0;
-        int y = 0;
-        Board instance = null;
-        Box expResult = null;
-        Box result = instance.getBoxByCoordinate(x, y);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Arrays.stream(validBoxCoordinates).forEach(coords -> {
+            Box box = board.getBoxByCoordinate(coords[0], coords[1]);
+            assertNotNull(box);
+            assertEquals(coords[0], box.getColumn());
+            assertEquals(coords[1], box.getRow());
+        });
+        assertNull(board.getBoxByCoordinate(0, 0));
     }
 
     /**
@@ -152,15 +176,13 @@ public class BoardTest {
     @Test
     public void testGetLineByCoordinate() {
         System.out.println("getLineByCoordinate");
-        int x = 0;
-        int y = 0;
-        Board instance = null;
-        Line expResult = null;
-        Line result = instance.getLineByCoordinate(x, y);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Arrays.stream(validLineCoordinates).forEach(coords -> {
+            Line line = board.getLineByCoordinate(coords[0], coords[1]);
+            assertNotNull(line);
+            assertEquals(coords[0], line.getColumn());
+            assertEquals(coords[1], line.getRow());
+        });
+        assertNull(board.getBoxByCoordinate(0, 0));
     }
 
-    
 }
