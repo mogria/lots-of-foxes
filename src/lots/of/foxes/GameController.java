@@ -1,5 +1,6 @@
 package lots.of.foxes;
 
+import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Line;
 

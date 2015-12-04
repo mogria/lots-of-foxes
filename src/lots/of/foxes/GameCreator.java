@@ -1,5 +1,6 @@
 package lots.of.foxes;
 
+import lots.of.foxes.model.GameConfig;
 import java.awt.Color;
 import lots.of.foxes.ai.DumbAITurnHandler;
 import lots.of.foxes.model.Board;
