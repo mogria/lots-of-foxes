@@ -72,9 +72,6 @@ public class BoxControl extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        if (box == null) {
-            return;
-        }
         super.paint(g);
 
         if (box.getOwner() != null) {

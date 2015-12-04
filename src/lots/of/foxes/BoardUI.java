@@ -8,6 +8,9 @@ package lots.of.foxes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     Collection<Box> boxes;
     Collection<LineControl> linesControls = new ArrayList<>();
     Collection<BoxControl> boxControls = new ArrayList<>();
-    
+
     Line lastClickedLine;
     int lineheight;
     int boxWidth;
@@ -40,23 +43,33 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
         this.boxWidth = boxWidth;
         this.setBackground(Color.BLACK);
 
-        this.setPreferredSize(new Dimension(500, 500));
+       
 
         for (Line l : lines) {
             LineControl lc = new LineControl(l, lineheight, boxWidth);
             linesControls.add(lc);
             this.add(lc);
         }
-
+        int boxrow =0 ;
+        int boxcol = 0;
         for (Box b : boxes) {
             BoxControl bc = new BoxControl(b, lineheight, boxWidth);
             boxControls.add(bc);
+            boxrow = b.getRow() > boxrow ? b.getRow() : boxrow;
+            boxcol = b.getColumn() > boxcol ? b.getColumn() : boxcol;        
             this.add(bc);
         }
+        
+        Dimension d = new Dimension();
+        d.height = ((boxrow-1) * boxWidth) - lineheight;// + ((boxcol + 2) * lineheight);
+        d.width = ((boxcol-1) * boxWidth) - lineheight;// + ((boxrow + 2) * lineheight);
 
-       
+        this.setPreferredSize(d);
+        
         addMouseListener(this);
+        
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -83,11 +96,6 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
     @Override
     public void paint(Graphics g) {
-
-        if (linesControls.isEmpty() || boxControls.isEmpty()) {
-            return;
-        }
-
         super.paint(g);
         linesControls.stream().forEach((lc) -> {
             lc.paint(this.getGraphics());
