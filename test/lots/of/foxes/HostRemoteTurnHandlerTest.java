@@ -30,11 +30,12 @@ public class HostRemoteTurnHandlerTest {
     int lineID = 60;
     Box box1;
     Box box2;
+    int port = 6969;
     
     public HostRemoteTurnHandlerTest() {
         player = new Player("Diego", Color.yellow);
         board = new Board(sizeX, sizeY);
-        hostHandler = new HostRemoteTurnHandler(6969, board, player);
+        hostHandler = new HostRemoteTurnHandler(port, board, player);
         box1 = new Box(1);
         box2 = new Box(2);
         line = new Line(lineID, box1, box2);

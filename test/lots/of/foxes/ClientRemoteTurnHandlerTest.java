@@ -30,6 +30,7 @@ public class ClientRemoteTurnHandlerTest {
     int sizeX = 9;
     int sizeY = 9;
     int lineID = 70;
+    int port = 6969;
     Box box7;
     Box box8;
     InetAddress ip;
@@ -44,7 +45,7 @@ public class ClientRemoteTurnHandlerTest {
         }
         player = new Player("Marcel", Color.yellow);
         board = new Board(sizeX, sizeY);
-        clientHandler = new ClientRemoteTurnHandler(board, player, ip, sizeX);
+        clientHandler = new ClientRemoteTurnHandler(board, player, ip, 6969);
         box7 = new Box(7);
         box8 = new Box(8);
         line = new Line(lineID, box7, box8);
