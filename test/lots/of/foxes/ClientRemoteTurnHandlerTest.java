@@ -62,7 +62,7 @@ public class ClientRemoteTurnHandlerTest {
     @Test
     public void receiveTurnTest(){
         line = clientHandler.receiveTurn();
-        assertEquals(70, line.getId());
+        assertEquals(60, line.getId());
     }
     
     @Test
