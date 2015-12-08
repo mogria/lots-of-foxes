@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Line;
 
@@ -29,10 +30,14 @@ public class LineControl extends JPanel {
      */
     int boxWidth;
 
-    public LineControl(Line line, int lineheight, int boxWidth) {
+    int lineoffset;
+
+    public LineControl(Line line, int lineheight, int boxWidth, int pointMultiplicator) {
         this.line = line;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
+        this.lineoffset = (lineheight * pointMultiplicator) / 4;
+
     }
 
     /**
@@ -52,7 +57,7 @@ public class LineControl extends JPanel {
         int cntBoxes = line.getColumn() / 2;
         int cntLines = line.getColumn() - cntBoxes;
 
-        return (cntBoxes * boxWidth) + (cntLines * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
     }
 
     /**
@@ -64,7 +69,7 @@ public class LineControl extends JPanel {
         int cntBoxes = line.getRow() / 2;
         int cntLines = line.getRow() - cntBoxes;
 
-        return (cntBoxes * boxWidth) + (cntLines * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
     }
 
     /**
@@ -75,14 +80,15 @@ public class LineControl extends JPanel {
     private boolean isBrick() {
         return line.getColumn() % 2 == 0 && line.getRow() % 2 == 0;
     }
-    
-    public boolean containsPoint(Point p)
-    {
-        boolean retval = false;
-        
-        retval = this.getX() < p.x && p.x < (this.getX() +this.getWidth()) && this.getY() < p.y && p.y < (this.getY() +this.getHeight());
-        
-        return retval;
+
+    /**
+     * Calculates if the passed Point is in the object
+     *
+     * @param p Point to check
+     * @return is in the current panel
+     */
+    public boolean containsPoint(Point p) {
+        return this.getX() < p.x && p.x < (this.getX() + this.getWidth()) && this.getY() < p.y && p.y < (this.getY() + this.getHeight());
     }
 
     @Override
@@ -112,16 +118,15 @@ public class LineControl extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
         if (line.getOwner() != null) {
             g.setColor(line.getOwner().getColor());
-        }else
-        {
-        g.setColor(Color.lightGray);
+        } else {
+            g.setColor(Color.lightGray);
         }
-       // g.setColor(Color.red);
+
         g.fillRect(0, 0, line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
 
     }

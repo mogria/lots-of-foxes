@@ -7,13 +7,10 @@ package lots.of.foxes;
 
 import java.awt.Color;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.util.HashMap;
 import javax.swing.JFrame;
 import lots.of.foxes.model.Board;
-import lots.of.foxes.model.Box;
-import lots.of.foxes.model.Line;
+
 
 /**
  *
@@ -28,17 +25,17 @@ public class BoardUITest extends JFrame {
         Board b = new Board(5, 5);
         
 
-        BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(), 10, 50,b.getGridSizeX(),b.getGridSizeY());
+        //BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(),b.getGridSizeX(),b.getGridSizeY(), 10, 50);
+        BoardUI bui = new BoardUI(b,10 , 50);
         bui.setVisible(true);
         this.add(bui);
-        this.setBackground(Color.GREEN);
+        
       // this.repaint();
     }
 
     public static void main(String args[]) {
 
         BoardUITest bt = new BoardUITest();
-        bt.setBackground(Color.GREEN);
         bt.setVisible(true);
     }
 }

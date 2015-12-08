@@ -6,18 +6,15 @@
 package lots.of.foxes;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Consumer;
 import javax.swing.JPanel;
+import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Box;
 import lots.of.foxes.model.Line;
 import lots.of.foxes.model.Player;
@@ -28,8 +25,6 @@ import lots.of.foxes.model.Player;
  */
 public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
-    Collection<Line> lines;
-    Collection<Box> boxes;
     Collection<LineControl> linesControls = new ArrayList<>();
     Collection<BoxControl> boxControls = new ArrayList<>();
 
@@ -38,61 +33,94 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     int boxWidth;
     int gridX;
     int gridY;
+    int pointMultiplicator = 2;
 
-    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int lineheight, int boxWidth,int gridX,int gridY) {
-        this.lines = lines;
-        this.boxes = boxes;
+    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int gridX, int gridY, int lineheight, int boxWidth) {
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
-        this.gridX = gridX /2+1;
-        this.gridY = gridY/2+1;
-        
-        
-       
-        Dimension d = new Dimension();
-        d.height = ((this.gridY) *(boxWidth+lineheight)) -boxWidth;
-        d.width = ((this.gridX) *(boxWidth+lineheight))-boxWidth;
+        this.gridX = gridX / 2 + 1;
+        this.gridY = gridY / 2 + 1;
 
-        this.setPreferredSize(d);
-        this.setSize(d);
+        InitializeBoard();
 
-        for (Line l : lines) {
-            LineControl lc = new LineControl(l, lineheight, boxWidth);
+        lines.stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
             linesControls.add(lc);
+            return lc;
+        }).forEach((lc) -> {
             this.add(lc);
-        }
-        int boxrow = 0;
-        int boxcol = 0;
-        for (Box b : boxes) {
-            BoxControl bc = new BoxControl(b, lineheight, boxWidth);
+        });
+
+        boxes.stream().map((b) -> new BoxControl(b, lineheight, boxWidth, pointMultiplicator)).map((bc) -> {
             boxControls.add(bc);
-            boxrow = b.getRow() > boxrow ? b.getRow() : boxrow;
-            boxcol = b.getColumn() > boxcol ? b.getColumn() : boxcol;
+            return bc;
+        }).forEach((bc) -> {
             this.add(bc);
-        }
-
-
-        addMouseListener(this);
+        });
 
     }
 
+    public BoardUI(Board b, int lineheight, int boxWidth) {
+        this.lineheight = lineheight;
+        this.boxWidth = boxWidth;
+        this.gridX = b.getGridSizeX() / 2 + 1;
+        this.gridY = b.getGridSizeX() / 2 + 1;
+
+        InitializeBoard();
+        b.getLines().stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
+            linesControls.add(lc);
+            return lc;
+        }).forEach((lc) -> {
+            this.add(lc);
+        });
+
+        b.getBoxes().stream().map((bo) -> new BoxControl(bo, lineheight, boxWidth, pointMultiplicator)).map((bc) -> {
+            boxControls.add(bc);
+            return bc;
+        }).forEach((bc) -> {
+            this.add(bc);
+        });
+    }
+
+    /**
+     * Initialize the board, sets the Dimension and adds the Mouselistener
+     */
+    private void InitializeBoard() {
+        this.setLayout(new GridBagLayout());
+        Dimension d = new Dimension();
+        d.height = ((this.gridY) * (boxWidth + lineheight)) - boxWidth + (lineheight * pointMultiplicator / 2);
+        d.width = ((this.gridX) * (boxWidth + lineheight)) - boxWidth + (lineheight * pointMultiplicator / 2);
+
+        setPreferredSize(d);
+        setSize(d);
+        addMouseListener(this);
+    }
+
+    /**
+     * Paints the Dots on the Board
+     *
+     * @param Graphics object to paint on
+     */
     private void paintDots(Graphics g) {
-        int r = (int) (lineheight);
+        int r = (int) (lineheight * pointMultiplicator);
         //Loop through all lines
-        for (int a = 0; a < this.gridY;a++){
-            g.fillOval(0, a*(boxWidth+lineheight), r, r);
-            for (int i =0;i < this.gridX;i++){
-                g.fillOval(i*(boxWidth+lineheight), a*(boxWidth+lineheight), r, r);
+        for (int a = 0; a < this.gridY; a++) {
+            g.fillOval(0, a * (boxWidth + lineheight), r, r);
+            for (int i = 0; i < this.gridX; i++) {
+                g.fillOval(i * (boxWidth + lineheight), a * (boxWidth + lineheight), r, r);
             }
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-      
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.     
     }
 
+    /**
+     * Returns the last clicked Row
+     *
+     * @return last clicked Row
+     */
     public Line lastClickedLine() {
         return this.lastClickedLine;
     }
@@ -101,49 +129,43 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     public void paint(Graphics g) {
         super.paint(g);
         this.paintDots(g);
+        /*
         linesControls.stream().forEach((lc) -> {
-            lc.paint(this.getGraphics());
+            lc.paintComponent(this.getGraphics());
         });
         boxControls.stream().forEach((bc) -> {
-            bc.paint(this.getGraphics());
+            bc.paintComponent(this.getGraphics());
         });
+*/
+    }
 
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Line l = null;
+
+        for (LineControl lc : linesControls) {
+            if (lc.containsPoint(e.getPoint())) {
+                l = lc.getLine();
+                break;
+            }
+        }
+
+        if (l != null) {
+            
+            this.lastClickedLine = l;
+            l.setOwner(new Player("Test", Color.yellow));
+            
+            this.repaint();
+        } else {
+            this.lastClickedLine = null;
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-         Line l = null;
-         int x = e.getX();
-        int y = e.getY();
-        
-        
-        for (LineControl lc : linesControls) {
-            int lx = lc.getX();
-            int ly = lc.getY();
-            
-            if (lc.containsPoint(e.getPoint())) {
-                l = lc.getLine();
-                break;
-            }
-        }
-        Component temp = findComponentAt(e.getPoint());
-        
-       /* LineControl lc = (LineControl)e.getSource();
-        l = lc.getLine();*/
-        
-        if (l != null) {
-            this.lastClickedLine = l;
-        } else {
-            this.lastClickedLine = null;
-        }
-    }
-
     @Override
     public void mouseEntered(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
