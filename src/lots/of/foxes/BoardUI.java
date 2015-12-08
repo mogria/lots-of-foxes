@@ -6,6 +6,7 @@
 package lots.of.foxes;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -35,59 +36,61 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     Line lastClickedLine;
     int lineheight;
     int boxWidth;
+    int gridX;
+    int gridY;
 
-    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int lineheight, int boxWidth) {
+    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int lineheight, int boxWidth,int gridX,int gridY) {
         this.lines = lines;
         this.boxes = boxes;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
-        this.setBackground(Color.BLACK);
-
+        this.gridX = gridX /2+1;
+        this.gridY = gridY/2+1;
+        
+        
        
+        Dimension d = new Dimension();
+        d.height = ((this.gridY) *(boxWidth+lineheight)) -boxWidth;
+        d.width = ((this.gridX) *(boxWidth+lineheight))-boxWidth;
+
+        this.setPreferredSize(d);
+        this.setSize(d);
 
         for (Line l : lines) {
             LineControl lc = new LineControl(l, lineheight, boxWidth);
             linesControls.add(lc);
             this.add(lc);
         }
-        int boxrow =0 ;
+        int boxrow = 0;
         int boxcol = 0;
         for (Box b : boxes) {
             BoxControl bc = new BoxControl(b, lineheight, boxWidth);
             boxControls.add(bc);
             boxrow = b.getRow() > boxrow ? b.getRow() : boxrow;
-            boxcol = b.getColumn() > boxcol ? b.getColumn() : boxcol;        
+            boxcol = b.getColumn() > boxcol ? b.getColumn() : boxcol;
             this.add(bc);
         }
-        
-        Dimension d = new Dimension();
-        d.height = ((boxrow-1) * boxWidth) - lineheight;// + ((boxcol + 2) * lineheight);
-        d.width = ((boxcol-1) * boxWidth) - lineheight;// + ((boxrow + 2) * lineheight);
 
-        this.setPreferredSize(d);
-        
+
         addMouseListener(this);
-        
+
     }
 
+    private void paintDots(Graphics g) {
+        int r = (int) (lineheight);
+        //Loop through all lines
+        for (int a = 0; a < this.gridY;a++){
+            g.fillOval(0, a*(boxWidth+lineheight), r, r);
+            for (int i =0;i < this.gridX;i++){
+                g.fillOval(i*(boxWidth+lineheight), a*(boxWidth+lineheight), r, r);
+            }
+        }
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        Line l = null;
-        for (LineControl lc : linesControls) {
-            if (lc.contains(e.getX(), e.getY())) {
-                l = lc.getLine();
-                break;
-            }
-        }
-
-        if (l != null) {
-            this.lastClickedLine = l;
-        } else {
-            this.lastClickedLine = null;
-        }
-
+      
     }
 
     public Line lastClickedLine() {
@@ -97,6 +100,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+        this.paintDots(g);
         linesControls.stream().forEach((lc) -> {
             lc.paint(this.getGraphics());
         });
@@ -114,6 +118,30 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     @Override
     public void mouseReleased(MouseEvent e) {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Line l = null;
+         int x = e.getX();
+        int y = e.getY();
+        
+        
+        for (LineControl lc : linesControls) {
+            int lx = lc.getX();
+            int ly = lc.getY();
+            
+            if (lc.containsPoint(e.getPoint())) {
+                l = lc.getLine();
+                break;
+            }
+        }
+        Component temp = findComponentAt(e.getPoint());
+        
+       /* LineControl lc = (LineControl)e.getSource();
+        l = lc.getLine();*/
+        
+        if (l != null) {
+            this.lastClickedLine = l;
+        } else {
+            this.lastClickedLine = null;
+        }
     }
 
     @Override

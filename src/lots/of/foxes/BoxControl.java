@@ -77,7 +77,11 @@ public class BoxControl extends JPanel {
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
         }
-        g.setColor(Color.YELLOW);
+        else
+        {
+        g.setColor(Color.white);
+        }
+      //  g.setColor(Color.YELLOW);
         g.fillRect(0, 0, boxWidth, boxWidth);
     }
 }

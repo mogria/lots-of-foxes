@@ -9,6 +9,7 @@ import lots.of.foxes.model.LineDirection;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Line;
 
@@ -74,6 +75,15 @@ public class LineControl extends JPanel {
     private boolean isBrick() {
         return line.getColumn() % 2 == 0 && line.getRow() % 2 == 0;
     }
+    
+    public boolean containsPoint(Point p)
+    {
+        boolean retval = false;
+        
+        retval = this.getX() < p.x && p.x < (this.getX() +this.getWidth()) && this.getY() < p.y && p.y < (this.getY() +this.getHeight());
+        
+        return retval;
+    }
 
     @Override
     public int getX() {
@@ -105,15 +115,13 @@ public class LineControl extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (isBrick()) {
-            g.setColor(Color.black);
-            g.drawRect(calcX(), calcY(), lineheight, lineheight);
-            return;
-        }
         if (line.getOwner() != null) {
             g.setColor(line.getOwner().getColor());
+        }else
+        {
+        g.setColor(Color.lightGray);
         }
-        g.setColor(Color.red);
+       // g.setColor(Color.red);
         g.fillRect(0, 0, line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
 
     }

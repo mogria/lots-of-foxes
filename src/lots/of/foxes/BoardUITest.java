@@ -25,9 +25,10 @@ public class BoardUITest extends JFrame {
         this.setLayout(new GridBagLayout());
         this.setSize(1000, 1000);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        Board b = new Board(4, 3);
+        Board b = new Board(5, 5);
+        
 
-        BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(), 10, 50);
+        BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(), 10, 50,b.getGridSizeX(),b.getGridSizeY());
         bui.setVisible(true);
         this.add(bui);
         this.setBackground(Color.GREEN);
