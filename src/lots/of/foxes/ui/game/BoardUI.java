@@ -26,23 +26,23 @@ import lots.of.foxes.model.Player;
  */
 public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runnable {
 
-    Collection<LineControl> linesControls = new ArrayList<>();
-    Collection<BoxControl> boxControls = new ArrayList<>();
+   private Collection<LineControl> linesControls = new ArrayList<>();
+    private Collection<BoxControl> boxControls = new ArrayList<>();
 
-    Line lastClickedLine;
-    int lineheight;
-    int boxWidth;
-    int gridX;
-    int gridY;
-    int pointMultiplicator = 2;
-    Thread threadToNotify;
+    private Line lastClickedLine;
+    private int lineheight;
+    private int boxWidth;
+    private int gridX;
+    private int gridY;
+    private int pointMultiplicator = 2;
+    private Thread threadToNotify;
 
-    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int gridX, int gridY, int lineheight, int boxWidth) {
+    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int gridX, int gridY, int lineheight, int boxWidth,Thread threadToNotify) {
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
         this.gridX = gridX / 2 + 1;
         this.gridY = gridY / 2 + 1;
-
+        this.threadToNotify = threadToNotify;
         InitializeBoard();
 
         lines.stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
@@ -123,7 +123,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runna
      *
      * @return last clicked Row
      */
-    public Line lastClickedLine() {
+    public Line GetlastClickedLine() {
         return this.lastClickedLine;
     }
 

@@ -19,14 +19,21 @@ public class Line extends GridElement implements Serializable {
      * the player who drew this line. null if the line is not yet drewn
      */
     private transient Player owner = null;
+    
+    /**
+     * the number of the player owning this line.
+     * 
+     * this required for serializing lines and creating the save game
+     */
+    private int ownerPlayerNum = -1;
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
         super(lineId);
-        /**if (adjacentBox1 == null && adjacentBox2 == null) {
-            throw new IllegalArgumentException("a line must at least have 1 adjacent box");
-        }**/
-        adjacentBoxes[0] = adjacentBox1;
-        adjacentBoxes[1] = adjacentBox2;
+        setAdjacentBoxes(adjacentBox1, adjacentBox2);
+    }
+    
+    public Line(int lineId) {
+        this(lineId, null, null);
     }
 
     /**
@@ -36,6 +43,15 @@ public class Line extends GridElement implements Serializable {
      */
     public Player getOwner() {
         return owner;
+    }
+    
+    /**
+     * Get the cached player number of the owner
+     * 
+     * @return the cached player number of the owner
+     */
+    public int getOwnerPlayerNum() {
+        return ownerPlayerNum;
     }
 
     /**
@@ -50,6 +66,7 @@ public class Line extends GridElement implements Serializable {
         }
 
         this.owner = owner;
+        this.ownerPlayerNum = owner.getPlayerNum();
 
         boolean ownerSet = false;
         for (Box box : adjacentBoxes) {
@@ -68,6 +85,16 @@ public class Line extends GridElement implements Serializable {
      */
     public Box[] getAdjacentBoxes() {
         return adjacentBoxes;
+    }
+    
+    /**
+     * Set the adjacent Boxes
+     * @param adjacentBox1 the first adjacent box, can be null
+     * @param adjacentBox2 the second adjacent box, can be null
+     */
+    final public void setAdjacentBoxes(Box adjacentBox1, Box adjacentBox2) {
+        adjacentBoxes[0] = adjacentBox1;
+        adjacentBoxes[1] = adjacentBox2;
     }
 
     /**

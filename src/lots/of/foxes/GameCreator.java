@@ -59,7 +59,7 @@ public class GameCreator {
      * @return an AITurnHandler instance
      */
     public ITurnHandler buildAITurnHandler() {
-        return new DumbAITurnHandler(board, new Player("DumbAI", Color.yellow));
+        return new DumbAITurnHandler(board, new Player(0, "DumbAI", Color.yellow));
     }
     
     /**

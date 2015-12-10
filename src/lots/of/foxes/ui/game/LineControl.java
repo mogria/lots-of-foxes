@@ -20,17 +20,17 @@ import lots.of.foxes.model.Line;
  */
 public class LineControl extends JPanel {
 
-    Line line;
+    private Line line;
     /**
      * Height of the Line
      */
-    int lineheight;
+    private int lineheight;
     /**
      * Dimension of the box
      */
-    int boxWidth;
+    private int boxWidth;
 
-    int lineoffset;
+    private int lineoffset;
 
     public LineControl(Line line, int lineheight, int boxWidth, int pointMultiplicator) {
         this.line = line;
@@ -72,14 +72,7 @@ public class LineControl extends JPanel {
         return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
     }
 
-    /**
-     * Check the if the current line is a Brick
-     *
-     * @return isBrick
-     */
-    private boolean isBrick() {
-        return line.getColumn() % 2 == 0 && line.getRow() % 2 == 0;
-    }
+
 
     /**
      * Calculates if the passed Point is in the object
@@ -120,7 +113,7 @@ public class LineControl extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         if (line.getOwner() != null) {
             g.setColor(line.getOwner().getColor());
         } else {

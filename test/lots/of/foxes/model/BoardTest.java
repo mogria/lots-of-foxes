@@ -57,7 +57,8 @@ public class BoardTest {
     @Before
     public void setUp() {
         board = new Board(3, 2);
-        player = new Player("TestPlayer", Color.BLACK);
+        player = new Player(0, "TestPlayer", Color.BLACK);
+        board.setPlayer(player);
     }
 
     @After
