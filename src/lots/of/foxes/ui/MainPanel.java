@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameFinder;
+import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  *
@@ -51,13 +52,18 @@ public class MainPanel extends JPanel implements Runnable{
         gf = new GameFinder(GF_PORT);
         while(true){
             try {
-                thread.sleep(300);
+                thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            // TODO: add Games to table
-            //for(String gf.getGames()
+            for (int i = dtm.getRowCount() - 1; i > -1; i--) {
+                dtm.removeRow(i);
+            }
+            for(RemoteGameConfig game : gf.getGames()){
+                Object[] row = {game.getGameName(), game.getFieldSize(), game.getServerIP(), game.getGameVersion()};
+                dtm.addRow(row);
+            }
         }
     }
     
@@ -79,8 +85,8 @@ public class MainPanel extends JPanel implements Runnable{
     private JScrollPane iniGameTable(){
         String[] columnNames = {"Server",
                                 "Fieldsize",
-                                "Version",
-                                "Join"};
+                                "IP",
+                                "Version"};
         
         dtm = new DefaultTableModel(columnNames, 0){
             @Override
