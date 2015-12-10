@@ -1,6 +1,5 @@
 package lots.of.foxes.model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -31,13 +30,13 @@ import java.util.HashMap;
  * 
  * @author Moritz
  */
-public final class Board implements Serializable {
+public final class Board {
     
     /**
      * stores all Boxes on the board
      * the key is generated out of the coordinates by genId()
      */
-    final private transient HashMap<Integer, Box> boxes = new HashMap<>();
+    final private HashMap<Integer, Box> boxes = new HashMap<>();
     
     /**
      * stores all Lines on the board
@@ -56,9 +55,14 @@ public final class Board implements Serializable {
     final private int sizeY;
     
     /**
-     * wheter the last move caused a box to be filled 
+     * whether the last move caused a box to be filled 
      */
-    private boolean boxFilled;
+    private boolean boxFilled = false;
+    
+    /**
+     * the two players playing on this board
+     */
+    private Player[] players = new Player[2];
     
     /**
      * Creates a game board, all the boxes & lines
@@ -81,18 +85,8 @@ public final class Board implements Serializable {
         
         for(int x = 0; x < gridSizeX; x++) {
             for(int y = 0; y < gridSizeY; y++) {
-                if(isLineCoordinate(x, y)) { // valid line coordinate
-                    Box box1;
-                    Box box2;
-                    
-                    if(y % 2 == 0) { // is an horizontal line
-                        box1 = getBoxByCoordinate(x, y - 1);
-                        box2 = getBoxByCoordinate(x, y + 1);
-                    } else { // is an vertical line
-                        box1 = getBoxByCoordinate(x - 1, y);
-                        box2 = getBoxByCoordinate(x + 1, y);
-                    }
-                    Line line = new Line(genId(x, y), box1, box2);
+                if(isLineCoordinate(x, y)) {
+                    Line line = new Line(genId(x, y));
                     lines.put(line.getId(), line);
                 }
             }
@@ -112,6 +106,7 @@ public final class Board implements Serializable {
             lines.put(line.getId(), line);
             playLine(line.getOwner(), line);
         });
+        boxFilled = false;
     }
     
     /**
@@ -132,6 +127,28 @@ public final class Board implements Serializable {
      */
     private boolean isValidCoordinate(int x, int y) {
         return x >= 0 && y >= 0 && x < getGridSizeX() && y < getGridSizeY();
+    }
+    
+    /**
+     * Helper method to determine which boxes are adjacent to a line.
+     * These boxes are then added as to the line object itself.
+     * @param line the line to set the adjacent boxes for
+     */
+    private void setAdjacentBoxesForLine(Line line) {
+        Box box1;
+        Box box2;
+
+        final int x = line.getColumn();
+        final int y = line.getColumn();
+        if(line.isHorizontal()) { // is an horizontal line
+            box1 = getBoxByCoordinate(x, y - 1);
+            box2 = getBoxByCoordinate(x, y + 1);
+        } else { // is an vertical line
+            box1 = getBoxByCoordinate(x - 1, y);
+            box2 = getBoxByCoordinate(x + 1, y);
+        }
+        
+        line.setAdjacentBoxes(box1, box2);
     }
     
     /**
@@ -221,6 +238,35 @@ public final class Board implements Serializable {
      */
     public int getGridSizeY() {
         return sizeY * 2 + 1;
+    }
+      
+    /**
+     * Get the value of players
+     *
+     * @return the value of players
+     */
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    /**
+     * Get the value of players at specified index
+     *
+     * @param index the index of players
+     * @return the value of players at specified index
+     */
+    public Player getPlayer(int playerNum) {
+        return this.players[playerNum];
+    }
+
+    /**
+     * Set a player object
+
+     * @param player set a new player, the player with the same Player num is overridden
+     */
+    public void setPlayer(Player player) {
+        if(player == null) throw new IllegalArgumentException("player cannot be null");
+        this.players[player.getPlayerNum()] = player;
     }
     
     /**

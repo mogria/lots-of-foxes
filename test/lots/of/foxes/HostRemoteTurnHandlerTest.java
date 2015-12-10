@@ -33,7 +33,7 @@ public class HostRemoteTurnHandlerTest {
     int port = 6969;
     
     public HostRemoteTurnHandlerTest() {
-        player = new Player("Diego", Color.yellow);
+        player = new Player(0, "Diego", Color.yellow);
         board = new Board(sizeX, sizeY);
         hostHandler = new HostRemoteTurnHandler(port, board, player);
         box1 = new Box(1);
