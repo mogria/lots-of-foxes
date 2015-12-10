@@ -35,7 +35,10 @@ public class GameController {
             Line turnLine = getCurrent().receiveTurn();
             board.playLine(getCurrent().getPlayer(), turnLine);
             getCurrent().sendTurn(turnLine);
-            swap();
+            // only swap players if no box has been filled
+            if(!board.getBoxFilled()) {
+                swap();
+            }
         }
         
     }
