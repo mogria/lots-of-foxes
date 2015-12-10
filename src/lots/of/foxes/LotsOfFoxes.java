@@ -5,6 +5,8 @@
  */
 package lots.of.foxes;
 
+import lots.of.foxes.ui.LofFrame;
+
 /**
  *
  * @author Dethrall
@@ -15,7 +17,7 @@ public class LotsOfFoxes {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        new LofFrame().setVisible(true);
     }
     
 }

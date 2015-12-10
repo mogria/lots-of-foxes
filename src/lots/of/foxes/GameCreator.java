@@ -2,18 +2,38 @@ package lots.of.foxes;
 
 import lots.of.foxes.model.GameConfig;
 import java.awt.Color;
+import java.io.IOException;
 import lots.of.foxes.ai.DumbAITurnHandler;
 import lots.of.foxes.model.Board;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.LocalGameConfig;
 import lots.of.foxes.model.Player;
 import lots.of.foxes.model.RemoteGameConfig;
+import lots.of.foxes.savegame.SaveFile;
 
 /**
  *
  * @author Moritz
  */
 public final class GameCreator {
+    
+    public class GameCreationException extends Exception {
+
+        public GameCreationException() {
+        }
+
+        public GameCreationException(String message) {
+            super(message);
+        }
+
+        public GameCreationException(Throwable cause) {
+            super(cause);
+        }
+
+        public GameCreationException(String message, Throwable cause) {
+            super(message, cause);
+        }    
+    }
     
     /**
      * configuration on how to make a game.
@@ -31,17 +51,35 @@ public final class GameCreator {
     /**
      * create an instance of GameCreate
      * @param config how the game creator should create a game
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public GameCreator(GameConfig config) {
+    public GameCreator(GameConfig config) throws GameCreationException {
         this.config = config;
         this.board = buildBoard();
+    }
+    
+    private RemoteGameConfig getRemoteConfig() throws GameCreationException {
+        if(!(config instanceof RemoteGameConfig)) {
+            throw new GameCreationException("invalid configuration for remote game");
+        }
+        
+        return (RemoteGameConfig)config;
+    }
+
+    private LocalGameConfig getLocalConfig() throws GameCreationException {
+        if(!(config instanceof RemoteGameConfig)) {
+            throw new GameCreationException("invalid configuration for local game");
+        }
+        
+        return (LocalGameConfig)config;
     }
     
     /**
      * Creates an instance of GameController, depending on the GameConfig
      * @return an GameController instance
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public GameController buildGameController() {
+    public GameController buildGameController() throws GameCreationException {
         switch(config.getGameType()) {
             default:
             case LOCAL_AI:
@@ -57,12 +95,18 @@ public final class GameCreator {
     /**
      * Creates an instance of a Board, depending on the configured BoardSize
      * @return an Board instance
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public Board buildBoard() {
+    public Board buildBoard() throws GameCreationException {
         if(config.getGameType() == GameType.LOCAL_AI) {
-            LocalGameConfig localConfig = (LocalGameConfig)config;
+            LocalGameConfig localConfig = getLocalConfig();
             if(localConfig.isSaveGame()) {
-                new SaveFile(localConfig.getGameName())
+                SaveFile saveFile = new SaveFile(localConfig.getGameName());
+                try {
+                    return saveFile.load();
+                } catch (IOException ex) {
+                    throw new GameCreationException("couldn't load board from save file", ex);
+                }
             }
         }
         return new Board(config.getBoardSizeX(), config.getBoardSizeY());
@@ -79,12 +123,13 @@ public final class GameCreator {
     /**
      * Creates an instance of AITurnHandler depending on the GameConfig
      * @return an AITurnHandler instance
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public ITurnHandler buildAITurnHandler() {
+    public ITurnHandler buildAITurnHandler() throws GameCreationException {
         ITurnHandler aiTurnHandler;
         Player aiPlayer;
         
-        LocalGameConfig localConfig = (LocalGameConfig)config;
+        LocalGameConfig localConfig = getLocalConfig();
         switch(localConfig.getAIDifficulty()) {
             default:
             case LOW:
@@ -100,18 +145,20 @@ public final class GameCreator {
     /**
      * Creates an instance of HostRemoteTurnHandler depending on the GameConfig
      * @return an HostRemoteTurnHandler instance
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public ITurnHandler buildHostRemoteTurnHandler() {
-        RemoteGameConfig remoteConfig = (RemoteGameConfig)config;
+    public ITurnHandler buildHostRemoteTurnHandler() throws GameCreationException {
+        RemoteGameConfig remoteConfig = getRemoteConfig();
         return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(0));
     }
     
     /**
      * Creates an instance of ClientRemoteTurnHandler depending on the GameConfig
      * @return an ClientRemoteTurnHandler instance
+     * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public ITurnHandler buildClientRemoteTurnHandler() {
-        RemoteGameConfig remoteConfig = (RemoteGameConfig)config;
+    public ITurnHandler buildClientRemoteTurnHandler() throws GameCreationException {
+        RemoteGameConfig remoteConfig = getRemoteConfig();
         return new ClientRemoteTurnHandler(board, board.getPlayer(1), null, remoteConfig.getPort());
     }
     

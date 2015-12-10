@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lots.of.foxes.ui;
 
 import java.awt.BorderLayout;
@@ -13,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameCreator;
 import lots.of.foxes.GameController;
@@ -100,20 +96,22 @@ public class MainPanel extends JPanel implements Runnable{
         };
         
         gameTable = new JTable(dtm);
-                
+        
+        
         gameTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int row = gameTable.rowAtPoint(evt.getPoint());
-                // row 2 is IP Address, this may change if the columns change
-                String[] fieldSize = ((String) dtm.getValueAt(row, 1)).split(" x ");
-                String ip = (String) dtm.getValueAt(row, 2);
-                
-                GameConfig cfg = new GameConfig(Integer.valueOf(fieldSize[0]), Integer.valueOf(fieldSize[1]), ip, TCP_PORT);
-                cfg.setGameType(GameType.REMOTE_CLIENT);
-                GameCreator creator = new GameCreator(cfg);
-                GameController controller = creator.buildGameController();
-                controller.run();
+                try {
+                    int row = gameTable.rowAtPoint(evt.getPoint());
+                    // TODO: let's hope the row index doesn't change :-)
+                    GameConfig cfg = gf.getGames().get(row);
+                    cfg.setGameType(GameType.REMOTE_CLIENT);
+                    GameCreator creator = new GameCreator(cfg);
+                    GameController controller = creator.buildGameController();
+                    controller.run();
+                } catch (GameCreator.GameCreationException ex) {
+                    JOptionPane.showMessageDialog(gameTable.getParent(), ex, "Couldn't create game", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         return new JScrollPane(gameTable);
