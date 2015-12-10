@@ -43,7 +43,7 @@ public class ClientRemoteTurnHandlerTest {
         catch(UnknownHostException ex){
             System.out.println("Host not found: " + ex);
         }
-        player = new Player("Marcel", Color.yellow);
+        player = new Player(1, "Marcel", Color.yellow);
         board = new Board(sizeX, sizeY);
         clientHandler = new ClientRemoteTurnHandler(board, player, ip, 6969);
         box7 = new Box(7);
