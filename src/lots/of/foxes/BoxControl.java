@@ -8,10 +8,9 @@ package lots.of.foxes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import javax.swing.JComponent;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Box;
-import lots.of.foxes.model.LineDirection;
 
 /**
  *
@@ -22,11 +21,14 @@ public class BoxControl extends JPanel {
     Box box;
     int lineheight;
     int boxWidth;
+    int lineoffset;
 
-    public BoxControl(Box box, int lineheight, int boxWidth) {
+    public BoxControl(Box box, int lineheight, int boxWidth, int pointMultiplicator) {
         this.box = box;
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
+        this.lineoffset = (lineheight * pointMultiplicator) / 4;
+        
     }
 
     @Override
@@ -54,33 +56,45 @@ public class BoxControl extends JPanel {
         return boxWidth;
     }
 
+    /**
+     * Calculates the X coordinate of the current Row/Column
+     *
+     * @return X value
+     */
     private int calcX() {
 
         int cntBoxes = box.getColumn() / 2;
         int cntLines = box.getColumn() - cntBoxes;
 
-        return (cntBoxes * boxWidth) + (cntLines * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
 
     }
 
+    /**
+     * Calculates the Y coordinate of the current Row/Column
+     *
+     * @return Y value
+     */
     private int calcY() {
         int cntBoxes = box.getRow() / 2;
         int cntLines = box.getRow() - cntBoxes;
 
-        return (cntBoxes * boxWidth) + (cntLines * lineheight);
+        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
     }
 
     @Override
-    public void paint(Graphics g) {
-        if (box == null) {
-            return;
-        }
-        super.paint(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
+             g.fillRect(0, 0, boxWidth, boxWidth);
+             this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        } else {
+            //g.setColor(Color.gray);
+            
         }
-        g.setColor(Color.YELLOW);
-        g.fillRect(0, 0, boxWidth, boxWidth);
+
+       
     }
 }

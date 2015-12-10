@@ -6,12 +6,11 @@
 package lots.of.foxes;
 
 import java.awt.Color;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
-import java.util.HashMap;
 import javax.swing.JFrame;
 import lots.of.foxes.model.Board;
-import lots.of.foxes.model.Box;
-import lots.of.foxes.model.Line;
+
 
 /**
  *
@@ -20,14 +19,17 @@ import lots.of.foxes.model.Line;
 public class BoardUITest extends JFrame {
 
     public BoardUITest() throws HeadlessException {
+        this.setLayout(new GridBagLayout());
         this.setSize(1000, 1000);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         Board b = new Board(5, 5);
+        
 
-        BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(), 10, 50);
+        //BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(),b.getGridSizeX(),b.getGridSizeY(), 10, 50);
+        BoardUI bui = new BoardUI(b,10 , 50);
         bui.setVisible(true);
         this.add(bui);
-        this.setBackground(Color.GREEN);
+        
       // this.repaint();
     }
 

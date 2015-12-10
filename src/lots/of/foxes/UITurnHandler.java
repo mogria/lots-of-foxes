@@ -20,7 +20,7 @@ public class UITurnHandler extends AbstractTurnHandler{
 
     public UITurnHandler(Board board, Player player,int lineheight,int boxwidth) {
         super(board, player);
-        boardUI = new BoardUI(board.getLines(), board.getBoxes(), lineheight, boxwidth);
+       // boardUI = new BoardUI(board.getLines(), board.getBoxes(), lineheight, boxwidth);
     }
     
     @Override
