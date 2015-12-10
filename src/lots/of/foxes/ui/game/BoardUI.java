@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lots.of.foxes;
+package lots.of.foxes.ui.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.JPanel;
+import lots.of.foxes.ITurnHandler;
 import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Box;
 import lots.of.foxes.model.Line;
@@ -154,9 +155,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
         if (l != null) {
             
             this.lastClickedLine = l;
-            l.setOwner(new Player("Test", Color.yellow));
-            
-            this.repaint();
+         
         } else {
             this.lastClickedLine = null;
         }
