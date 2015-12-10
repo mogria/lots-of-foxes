@@ -30,6 +30,8 @@ public class SaveFile {
      */
     static private final String SAVE_GAME_DIR_NAME = ".lots-of-foxes";
     
+    static public final String EXTENSION = ".dat";
+    
     /**
      * Full directory path to where the SaveFiles are stored in is created in.
      * This includes the SAVE_GAME_DIR_NAME as last directory.
@@ -73,6 +75,10 @@ public class SaveFile {
         }).findFirst().get();
     }
     
+    public static String getSaveGameDir() {
+        return saveGameDir;
+    }
+    
     /**
      * The file object on the file system for this save file
      */
@@ -85,7 +91,7 @@ public class SaveFile {
     
     public SaveFile(String saveGameName) {
         this.saveGameName = saveGameName;
-        this.file = new File(saveGameDir + File.separator + saveGameName + ".dat");
+        this.file = new File(saveGameDir + File.separator + saveGameName + "." + EXTENSION);
     }
     
     /**
