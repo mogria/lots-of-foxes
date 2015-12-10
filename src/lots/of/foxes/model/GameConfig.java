@@ -34,8 +34,6 @@ public class GameConfig {
      */
     private GameType gameType;
 
-    private int port;
-    
     /**
      * constructor
      * 
@@ -43,11 +41,10 @@ public class GameConfig {
      * @param boardSizeY
      * @param gameName 
      */
-    public GameConfig(int boardSizeX, int boardSizeY, String gameName, int port) {
+    public GameConfig(int boardSizeX, int boardSizeY, String gameName) {
         this.boardSizeX = boardSizeX;
         this.boardSizeY = boardSizeY;
         this.gameName = gameName;
-        this.port = port;
     }
     
     /**
@@ -138,13 +135,5 @@ public class GameConfig {
      */
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
     }
 }

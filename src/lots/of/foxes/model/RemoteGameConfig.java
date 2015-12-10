@@ -24,9 +24,15 @@ public class RemoteGameConfig extends GameConfig{
     private String serverIP;
     
     /**
+     * the port under which the server is reachable
+     */
+    private int port;
+    
+    /**
      * gets increased automatically by the game finder, if there is no further response from the server
      */
     private int ttl;
+    
     
     /**
      * Constructor
@@ -38,9 +44,10 @@ public class RemoteGameConfig extends GameConfig{
      * @param serverIP
      */
     public RemoteGameConfig(String gameName, String gameVersion, int boardSizeX, int boardSizeY, String serverIP, int port){
-        super(boardSizeX, boardSizeY, gameName, port);
+        super(boardSizeX, boardSizeY, gameName);
         this.gameVersion = gameVersion;
         this.serverIP = serverIP;
+        this.port = port;
         this.ttl = 0;
     }
 
@@ -83,5 +90,13 @@ public class RemoteGameConfig extends GameConfig{
 
     public void setServerIP(String serverIP) {
         this.serverIP = serverIP;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }
