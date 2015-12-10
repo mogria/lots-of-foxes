@@ -127,7 +127,7 @@ public class GameFinder implements Runnable{
      */
     public synchronized void addGame(String[] gameInfo, String address){
         // gameName;gameVersion;sizeX;sizeY;serverIP
-        RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3].trim()), Integer.parseInt(gameInfo[4].trim()), address);
+        RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3].trim()), Integer.parseInt(gameInfo[4].trim()), address, 6969);
         boolean isNewGame = true;
         
         //if the list is empty, the new game can just be added without checkin, if it's already exists.

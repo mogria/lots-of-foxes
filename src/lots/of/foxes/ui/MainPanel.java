@@ -27,7 +27,8 @@ import lots.of.foxes.model.RemoteGameConfig;
  */
 public class MainPanel extends JPanel implements Runnable{
     
-    private static final int GF_PORT = 6969;
+    private static final int UDP_PORT = 6969;
+    private static final int TCP_PORT = 6969;
     
     DefaultTableModel dtm;
     Thread thread;
@@ -52,7 +53,7 @@ public class MainPanel extends JPanel implements Runnable{
     
     @Override
     public void run(){
-        gf = new GameFinder(GF_PORT);
+        gf = new GameFinder(UDP_PORT);
         while(true){
             try {
                 thread.sleep(1000);
@@ -108,7 +109,7 @@ public class MainPanel extends JPanel implements Runnable{
                 String[] fieldSize = ((String) dtm.getValueAt(row, 1)).split(" x ");
                 String ip = (String) dtm.getValueAt(row, 2);
                 
-                GameConfig cfg = new GameConfig(Integer.valueOf(fieldSize[0]), Integer.valueOf(fieldSize[1]), ip);
+                GameConfig cfg = new GameConfig(Integer.valueOf(fieldSize[0]), Integer.valueOf(fieldSize[1]), ip, TCP_PORT);
                 cfg.setGameType(GameType.REMOTE_CLIENT);
                 GameCreator creator = new GameCreator(cfg);
                 GameController controller = creator.buildGameController();

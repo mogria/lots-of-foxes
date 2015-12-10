@@ -67,7 +67,7 @@ public class GameCreator {
      * @return an HostRemoteTurnHandler instance
      */
     public ITurnHandler buildHostRemoteTurnHandler() {
-        return null;
+        return new HostRemoteTurnHandler(config.getPort(), board, board.getPlayer(0));
     }
     
     /**
@@ -75,7 +75,7 @@ public class GameCreator {
      * @return an ClientRemoteTurnHandler instance
      */
     public ITurnHandler buildClientRemoteTurnHandler() {
-        return null;
+        return new ClientRemoteTurnHandler(board, board.getPlayer(1), null, config.getPort());
     }
     
 }

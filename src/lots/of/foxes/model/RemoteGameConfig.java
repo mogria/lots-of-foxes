@@ -37,8 +37,8 @@ public class RemoteGameConfig extends GameConfig{
      * @param gameVersion
      * @param serverIP
      */
-    public RemoteGameConfig(String gameName, String gameVersion, int boardSizeX, int boardSizeY, String serverIP){
-        super(boardSizeX, boardSizeY, gameName);
+    public RemoteGameConfig(String gameName, String gameVersion, int boardSizeX, int boardSizeY, String serverIP, int port){
+        super(boardSizeX, boardSizeY, gameName, port);
         this.gameVersion = gameVersion;
         this.serverIP = serverIP;
         this.ttl = 0;
