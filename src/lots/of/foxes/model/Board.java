@@ -31,32 +31,32 @@ import java.util.HashMap;
  * 
  * @author Moritz
  */
-public class Board implements Serializable {
+public final class Board implements Serializable {
     
     /**
      * stores all Boxes on the board
      * the key is generated out of the coordinates by genId()
      */
-    private transient HashMap<Integer, Box> boxes = new HashMap<>();
+    final private transient HashMap<Integer, Box> boxes = new HashMap<>();
     
     /**
      * stores all Lines on the board
      * the key is generated out of the coordinates by genId()
      */
-    private HashMap<Integer, Line> lines = new HashMap<>();
+    final private HashMap<Integer, Line> lines = new HashMap<>();
     
     /**
      * the size of the grid in the x dimension
      */
-    private int gridSizeX;
+    final private int sizeX;
     
     /**
      * the size of the grid in the y dimension
      */
-    private int gridSizeY;
+    final private int sizeY;
     
     /**
-     * 
+     * wheter the last move caused a box to be filled 
      */
     private boolean boxFilled;
     
@@ -67,8 +67,10 @@ public class Board implements Serializable {
      * @param sizeY the number of boxes on the board in the Y coordinate
      */
     public Board(int sizeX, int sizeY) {
-        this.gridSizeX = sizeX * 2 + 1;
-        this.gridSizeY = sizeY * 2 + 1;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        final int gridSizeX = getGridSizeX();
+        final int gridSizeY = getGridSizeY();
         
         for(int x = 0; x < sizeX; x++) {
             for(int y = 0; y < sizeY; y++) {
@@ -97,6 +99,13 @@ public class Board implements Serializable {
         }
     }
     
+    /**
+     * Create a board out of a collection of played lines
+     * 
+     * @param sizeX the number of boxes on the board in the X coordinate
+     * @param sizeY the number of boxes on the board in the Y coordinate
+     * @param playedLines a collection of lines already played. The owner needs to be set correctly.
+     */
     public Board(int sizeX, int sizeY, Collection<Line> playedLines) {
         this(sizeX, sizeY);
         playedLines.stream().forEach(line ->  {
@@ -122,7 +131,7 @@ public class Board implements Serializable {
      * @return true if valid coordinates are passed
      */
     private boolean isValidCoordinate(int x, int y) {
-        return x >= 0 && y >= 0 && x < gridSizeX && y < gridSizeY;
+        return x >= 0 && y >= 0 && x < getGridSizeX() && y < getGridSizeY();
     }
     
     /**
@@ -182,11 +191,28 @@ public class Board implements Serializable {
     }
     
     /**
+     * returns the number of boxes in the x dimension
+     * @return returns the number of boxes  in the x dimension
+     */   
+    public int getSizeX() {
+        return sizeX;
+    }
+    
+    
+    /**
+     * returns the number of boxes in the y dimension
+     * @return returns the number of boxes  in the y dimension
+     */   
+    public int getSizeY() {
+        return sizeY;
+    }
+    
+    /**
      * returns the grid size in the x dimension
      * @return the grid size in the x dimension
      */
     public int getGridSizeX() {
-        return gridSizeX;
+        return sizeX * 2 + 1;
     }
 
     /**
@@ -194,14 +220,14 @@ public class Board implements Serializable {
      * @return the grid size in the y dimension
      */
     public int getGridSizeY() {
-        return gridSizeY;
+        return sizeY * 2 + 1;
     }
     
     /**
      * assign a line to a player by lineId
      * if the line has already been played false is returned
-     * @param player
-     * @param lineId 
+     * @param player the player who should own the line
+     * @param lineId the lineId of the line played
      * @return true if successful, false if line is already played
      */
     public boolean playLine(Player player, int lineId) {
@@ -212,8 +238,8 @@ public class Board implements Serializable {
     /**
      * assign a line to a player
      * if the line has already been played false is returned
-     * @param player
-     * @param lineId 
+     * @param player  the player who should own the line
+     * @param line
      * @return true if successful, false if line is already played
      */
     public boolean playLine(Player player, Line line) {
