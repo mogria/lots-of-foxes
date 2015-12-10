@@ -104,8 +104,7 @@ public class MainPanel extends JPanel implements Runnable{
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = gameTable.rowAtPoint(evt.getPoint());
-                String value = (String) dtm.getValueAt(row, 2);
-                String ip = value.substring(value.lastIndexOf("/") + 1);
+                String ip = (String) dtm.getValueAt(row, 2);
                 
                 System.out.println(ip);
                 
