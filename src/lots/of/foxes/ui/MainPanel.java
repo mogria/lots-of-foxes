@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameCreator;
 import lots.of.foxes.GameController;
 import lots.of.foxes.GameFinder;
-import lots.of.foxes.GameType;
+import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.RemoteGameConfig;
 

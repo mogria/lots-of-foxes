@@ -1,7 +1,5 @@
 package lots.of.foxes.model;
 
-import lots.of.foxes.GameType;
-
 /**
  * Stores the configuration for a Game
  * 

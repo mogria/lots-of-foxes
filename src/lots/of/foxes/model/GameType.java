@@ -1,4 +1,4 @@
-package lots.of.foxes;
+package lots.of.foxes.model;
 
 /**
  *
@@ -7,5 +7,6 @@ package lots.of.foxes;
 public enum GameType {
     REMOTE_HOST,
     REMOTE_CLIENT,
-    LOCAL_AI
+    LOCAL_AI,
+    LOCAL_AI_SAVEGAME,
 };

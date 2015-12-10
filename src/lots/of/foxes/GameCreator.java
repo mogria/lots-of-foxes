@@ -4,18 +4,34 @@ import lots.of.foxes.model.GameConfig;
 import java.awt.Color;
 import lots.of.foxes.ai.DumbAITurnHandler;
 import lots.of.foxes.model.Board;
+import lots.of.foxes.model.GameType;
+import lots.of.foxes.model.LocalGameConfig;
 import lots.of.foxes.model.Player;
+import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  *
  * @author Moritz
  */
-public class GameCreator {
+public final class GameCreator {
     
+    /**
+     * configuration on how to make a game.
+     * 
+     * This may also be an instance of LocalGameConfig or RemoteGameConfig
+     * depending on the gameType attribute.
+     */
     private GameConfig config;
     
+    /**
+     * the board created the game later takes place on.
+     */
     private Board board;
     
+    /**
+     * create an instance of GameCreate
+     * @param config how the game creator should create a game
+     */
     public GameCreator(GameConfig config) {
         this.config = config;
         this.board = buildBoard();
@@ -43,6 +59,12 @@ public class GameCreator {
      * @return an Board instance
      */
     public Board buildBoard() {
+        if(config.getGameType() == GameType.LOCAL_AI) {
+            LocalGameConfig localConfig = (LocalGameConfig)config;
+            if(localConfig.isSaveGame()) {
+                new SaveFile(localConfig.getGameName())
+            }
+        }
         return new Board(config.getBoardSizeX(), config.getBoardSizeY());
     }
     
@@ -59,9 +81,20 @@ public class GameCreator {
      * @return an AITurnHandler instance
      */
     public ITurnHandler buildAITurnHandler() {
-        Player aiPlayer = new Player(1, "DumbAI", Color.blue);
+        ITurnHandler aiTurnHandler;
+        Player aiPlayer;
+        
+        LocalGameConfig localConfig = (LocalGameConfig)config;
+        switch(localConfig.getAIDifficulty()) {
+            default:
+            case LOW:
+                aiPlayer = new Player(1, "DumbAI", Color.blue);
+                aiTurnHandler = new DumbAITurnHandler(board, aiPlayer);
+        }
+        
         board.setPlayer(aiPlayer);
-        return new DumbAITurnHandler(board, aiPlayer);
+        
+        return aiTurnHandler; 
     }
     
     /**
@@ -69,7 +102,8 @@ public class GameCreator {
      * @return an HostRemoteTurnHandler instance
      */
     public ITurnHandler buildHostRemoteTurnHandler() {
-        return new HostRemoteTurnHandler(config.getPort(), board, board.getPlayer(0));
+        RemoteGameConfig remoteConfig = (RemoteGameConfig)config;
+        return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(0));
     }
     
     /**
@@ -77,7 +111,8 @@ public class GameCreator {
      * @return an ClientRemoteTurnHandler instance
      */
     public ITurnHandler buildClientRemoteTurnHandler() {
-        return new ClientRemoteTurnHandler(board, board.getPlayer(1), null, config.getPort());
+        RemoteGameConfig remoteConfig = (RemoteGameConfig)config;
+        return new ClientRemoteTurnHandler(board, board.getPlayer(1), null, remoteConfig.getPort());
     }
     
 }

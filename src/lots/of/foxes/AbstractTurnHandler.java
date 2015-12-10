@@ -37,7 +37,7 @@ public abstract class AbstractTurnHandler implements ITurnHandler {
      */
     @Override
     public Player getPlayer() {
-        return player;
+        return board.getPlayer(player.getPlayerNum());
     }
     
 }
