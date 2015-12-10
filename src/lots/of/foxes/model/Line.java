@@ -29,6 +29,7 @@ public class Line extends GridElement implements Serializable {
 
     public Line(int lineId, Box adjacentBox1, Box adjacentBox2) {
         super(lineId);
+        adjacentBoxes = new Box[2];
         setAdjacentBoxes(adjacentBox1, adjacentBox2);
     }
     
@@ -93,6 +94,7 @@ public class Line extends GridElement implements Serializable {
      * @param adjacentBox2 the second adjacent box, can be null
      */
     final public void setAdjacentBoxes(Box adjacentBox1, Box adjacentBox2) {
+        adjacentBoxes = new Box[2];
         adjacentBoxes[0] = adjacentBox1;
         adjacentBoxes[1] = adjacentBox2;
     }

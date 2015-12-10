@@ -23,6 +23,11 @@ public class SaveFileTest {
         saveFile = new SaveFile("test-save-game");
         board = new Board(3, 3);
     }
+    
+    @After
+    public void tearDown() {
+        saveFile.delete();
+    }
 
     /**
      * Test of exists method, of class SaveFile.
@@ -51,9 +56,11 @@ public class SaveFileTest {
     @Test
     public void testLoad() throws IOException {
         System.out.println("load");
-        board.playLine(new Player("test player", Color.BLACK), board.getLineByCoordinate(1, 0));
+        board.playLine(new Player(0, "test player", Color.BLACK), board.getLineByCoordinate(0, 1));
         saveFile.save(board);
         Board loadedBoard = saveFile.load();
+        assertNull(loadedBoard.getLineByCoordinate(0, 0));
+        assertNotNull(loadedBoard.getLineByCoordinate(0, 1));
         assertNotNull(loadedBoard.getLineByCoordinate(0, 1).getOwner());
     }
 

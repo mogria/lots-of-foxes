@@ -1,5 +1,6 @@
 package lots.of.foxes.model;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -76,6 +77,9 @@ public final class Board {
         final int gridSizeX = getGridSizeX();
         final int gridSizeY = getGridSizeY();
         
+        setPlayer(new Player(0, "Player 1", Color.red));
+        setPlayer(new Player(1, "Player 2", Color.blue));
+        
         for(int x = 0; x < sizeX; x++) {
             for(int y = 0; y < sizeY; y++) {
                 Box box = new Box(genId(x * 2 + 1, y * 2 + 1));
@@ -88,6 +92,7 @@ public final class Board {
                 if(isLineCoordinate(x, y)) {
                     Line line = new Line(genId(x, y));
                     lines.put(line.getId(), line);
+                    setAdjacentBoxesForLine(line);
                 }
             }
         }
@@ -98,13 +103,18 @@ public final class Board {
      * 
      * @param sizeX the number of boxes on the board in the X coordinate
      * @param sizeY the number of boxes on the board in the Y coordinate
+     * @param player1 a player
+     * @param player2 a player
      * @param playedLines a collection of lines already played. The owner needs to be set correctly.
      */
-    public Board(int sizeX, int sizeY, Collection<Line> playedLines) {
+    public Board(int sizeX, int sizeY, Player player1, Player player2, Collection<Line> playedLines) {
         this(sizeX, sizeY);
+        setPlayer(player1);
+        setPlayer(player2);
         playedLines.stream().forEach(line ->  {
+            setAdjacentBoxesForLine(line);
             lines.put(line.getId(), line);
-            playLine(line.getOwner(), line);
+            playLine(getPlayer(line.getOwnerPlayerNum()), line);
         });
         boxFilled = false;
     }
@@ -139,7 +149,7 @@ public final class Board {
         Box box2;
 
         final int x = line.getColumn();
-        final int y = line.getColumn();
+        final int y = line.getRow();
         if(line.isHorizontal()) { // is an horizontal line
             box1 = getBoxByCoordinate(x, y - 1);
             box2 = getBoxByCoordinate(x, y + 1);

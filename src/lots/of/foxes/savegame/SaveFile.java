@@ -7,8 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lots.of.foxes.model.Board;
+import lots.of.foxes.model.Line;
+import lots.of.foxes.model.Player;
 
 /**
  * represents a save file on the hard disk
@@ -29,7 +35,7 @@ public class SaveFile {
      * This includes the SAVE_GAME_DIR_NAME as last directory.
      * This is different depending on which OS you're and and is determined
      * by the determineSaveGameDir() method.
-     */
+     */ 
     static private String saveGameDir;
     
     static {
@@ -106,7 +112,19 @@ public class SaveFile {
         }
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(board);
+        ArrayList<Line> linesToBeSaved = new ArrayList<>(board.getLines().stream()
+                .filter(line -> line.getOwner() != null)
+                .collect(Collectors.toList()));
+        final int numLines = linesToBeSaved.size();
+        
+        objectOutputStream.writeObject(board.getPlayers()[0]);
+        objectOutputStream.writeObject(board.getPlayers()[1]);
+        objectOutputStream.writeInt(board.getSizeX());
+        objectOutputStream.writeInt(board.getSizeY());
+        objectOutputStream.writeInt(numLines);
+        for(int i = 0; i < numLines; i++) {
+            objectOutputStream.writeObject(linesToBeSaved.get(i));
+        }
     }
     
     /**
@@ -120,8 +138,16 @@ public class SaveFile {
         FileInputStream fileInputStream = new FileInputStream(file);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         try {
-            Object boardObject = objectInputStream.readObject();
-            return (Board)boardObject;
+            final Player player1 = (Player)objectInputStream.readObject();
+            final Player player2 = (Player)objectInputStream.readObject();
+            final int sizeX = objectInputStream.readInt();
+            final int sizeY = objectInputStream.readInt();
+            final int numLines = objectInputStream.readInt();
+            ArrayList<Line> lines = new ArrayList<>();
+            for(int i = 0; i < numLines; i++) {
+                lines.add((Line)objectInputStream.readObject());
+            }
+            return new Board(sizeX, sizeY, player1, player2, lines);
         } catch (ClassNotFoundException | ClassCastException ex) {
             throw new IOException("could not read board", ex);
         }
