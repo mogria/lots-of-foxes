@@ -26,9 +26,9 @@ public class BoardUITest extends JFrame {
         
 
         //BoardUI bui = new BoardUI(b.getLines(), b.getBoxes(),b.getGridSizeX(),b.getGridSizeY(), 10, 50);
-        BoardUI bui = new BoardUI(b,10 , 50);
-        bui.setVisible(true);
-        this.add(bui);
+      //  BoardUI bui = new BoardUI(b,10 , 50);
+       // bui.setVisible(true);
+        //this.add(bui);
         
       // this.repaint();
     }

@@ -102,12 +102,14 @@ public class GameFinder implements Runnable{
                 receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 try {
                     socket.receive(receivePacket);
-                    String s = new String(receivePacket.getData()) + ";" + receivePacket.getAddress();
+                    String s = new String(receivePacket.getData());
                     String[] message = s.split(";");
+                    String address = receivePacket.getAddress().toString();
+                    address = address.substring(address.lastIndexOf("/") + 1);
                     //Only Messages with the correct answer statement will be safed in the ArrayList games.
                     if(message[0].equals(RESPONSE_MESSAGE)){
                         //System.out.println("received: " + message[0]);
-                        addGame(message);
+                        addGame(message, address);
                     }
                 } catch(IOException ex) {
                     ex.printStackTrace();
@@ -120,11 +122,12 @@ public class GameFinder implements Runnable{
     /**
      * This method adds or updates the ArrayList games with a given game.
      * 
-     * @param game 
+     * @param gameInfo
+     * @param address
      */
-    public synchronized void addGame(String[] gameInfo){
+    public synchronized void addGame(String[] gameInfo, String address){
         // gameName;gameVersion;sizeX;sizeY;serverIP
-        RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3]), Integer.parseInt(gameInfo[4]), gameInfo[5]);
+        RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3].trim()), Integer.parseInt(gameInfo[4].trim()), address);
         boolean isNewGame = true;
         
         //if the list is empty, the new game can just be added without checkin, if it's already exists.

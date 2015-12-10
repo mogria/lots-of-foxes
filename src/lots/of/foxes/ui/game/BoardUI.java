@@ -24,7 +24,7 @@ import lots.of.foxes.model.Player;
  *
  * @author Adrian
  */
-public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
+public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runnable {
 
     Collection<LineControl> linesControls = new ArrayList<>();
     Collection<BoxControl> boxControls = new ArrayList<>();
@@ -35,6 +35,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     int gridX;
     int gridY;
     int pointMultiplicator = 2;
+    Thread threadToNotify;
 
     public BoardUI(Collection<Line> lines, Collection<Box> boxes, int gridX, int gridY, int lineheight, int boxWidth) {
         this.lineheight = lineheight;
@@ -60,7 +61,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
 
     }
 
-    public BoardUI(Board b, int lineheight, int boxWidth) {
+    public BoardUI(Board b, int lineheight, int boxWidth,Thread threadToNotify) {
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
         this.gridX = b.getGridSizeX() / 2 + 1;
@@ -155,6 +156,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
         if (l != null) {
             
             this.lastClickedLine = l;
+            threadToNotify.notify();
          
         } else {
             this.lastClickedLine = null;
@@ -188,6 +190,11 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler {
     @Override
     public Player getPlayer() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void run() {
+        this.repaint();
     }
 
 }

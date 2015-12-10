@@ -13,14 +13,17 @@ import lots.of.foxes.model.Player;
 public class UITurnHandler extends AbstractTurnHandler {
 
     private BoardUI boardUI;
+    Thread thread;
 
     public BoardUI getBoardUI() {
         return boardUI;
     }
 
-    public UITurnHandler(Board board, Player player, int lineheight, int boxwidth) {
+    public UITurnHandler(Board board, Player player, int lineheight, int boxwidth, Thread threadtoNotify) {
         super(board, player);
-        boardUI = new BoardUI(board, 10, 50);
+        boardUI = new BoardUI(board, 10, 50, threadtoNotify);
+        thread = new Thread(boardUI);
+        thread.start();
     }
 
     @Override
