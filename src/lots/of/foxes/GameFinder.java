@@ -107,7 +107,7 @@ public class GameFinder implements Runnable{
                     //Only Messages with the correct answer statement will be safed in the ArrayList games.
                     if(message[0].equals(RESPONSE_MESSAGE)){
                         //System.out.println("received: " + message[0]);
-                        addGame(new String(receivePacket.getData()));
+                        addGame(message);
                     }
                 } catch(IOException ex) {
                     ex.printStackTrace();
@@ -122,9 +122,7 @@ public class GameFinder implements Runnable{
      * 
      * @param game 
      */
-    public synchronized void addGame(String gameString){
-        
-        String[] gameInfo = gameString.split(";");
+    public synchronized void addGame(String[] gameInfo){
         // gameName;gameVersion;sizeX;sizeY;serverIP
         RemoteGameConfig newGame = new RemoteGameConfig(gameInfo[1], gameInfo[2], Integer.parseInt(gameInfo[3]), Integer.parseInt(gameInfo[4]), gameInfo[5]);
         boolean isNewGame = true;
@@ -135,7 +133,7 @@ public class GameFinder implements Runnable{
             while(itr.hasNext()){
                 RemoteGameConfig currentGame = itr.next();
                 
-                if(!currentGame.getServerIP().equals(newGame.getServerIP())){
+                if(currentGame.getServerIP().equals(newGame.getServerIP())){
                     currentGame.setTtl(0);
                     itr.set(currentGame);
                     isNewGame = false;
@@ -181,7 +179,6 @@ public class GameFinder implements Runnable{
     public ArrayList<RemoteGameConfig> getGames() {
         return games;
     }
-    
     
     public static void main(String[] args) {
         GameFinder testFinder = new GameFinder(6969);

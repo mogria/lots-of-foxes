@@ -44,9 +44,21 @@ public class RemoteGameConfig extends GameConfig{
         this.ttl = 0;
     }
 
+    /**
+     * returns a readable String representation of the game
+     * @return 
+     */
     @Override
     public String toString() {
         return getGameName() + " - " + getServerIP() + " - " + getTtl();
+    }
+   
+    /**
+     * returns the field dimensions as String
+     * @return 
+     */
+    public String getFieldSize(){
+        return getBoardSizeX() + " x " + getBoardSizeY();
     }
     
     public String getGameVersion() {
