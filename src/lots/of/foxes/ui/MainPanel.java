@@ -5,25 +5,25 @@
  */
 package lots.of.foxes.ui;
 
-import com.sun.rowset.internal.Row;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import lots.of.foxes.GameCreator;
+import lots.of.foxes.GameController;
 import lots.of.foxes.GameFinder;
+import lots.of.foxes.GameType;
+import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  *
- * @author Dethrall
+ * @author Marcel
  */
 public class MainPanel extends JPanel implements Runnable{
     
@@ -41,7 +41,7 @@ public class MainPanel extends JPanel implements Runnable{
         JPanel buttonPanel = initButtons();
         add(buttonPanel, BorderLayout.NORTH);
         
-        JScrollPane gameTableScroll = iniGameTable();
+        JScrollPane gameTableScroll = initGameTable();
         add(gameTableScroll, BorderLayout.CENTER);
         
         if(thread == null){
@@ -85,7 +85,7 @@ public class MainPanel extends JPanel implements Runnable{
         return buttonPanel;
     }
     
-    private JScrollPane iniGameTable(){
+    private JScrollPane initGameTable(){
         String[] columnNames = {"Server",
                                 "Fieldsize",
                                 "IP",
@@ -104,10 +104,15 @@ public class MainPanel extends JPanel implements Runnable{
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = gameTable.rowAtPoint(evt.getPoint());
+                // row 2 is IP Address, this may change if the columns change
+                String[] fieldSize = ((String) dtm.getValueAt(row, 1)).split(" x ");
                 String ip = (String) dtm.getValueAt(row, 2);
                 
-                System.out.println(ip);
-                
+                GameConfig cfg = new GameConfig(Integer.valueOf(fieldSize[0]), Integer.valueOf(fieldSize[1]), ip);
+                cfg.setGameType(GameType.REMOTE_CLIENT);
+                GameCreator creator = new GameCreator(cfg, GF_PORT);
+                GameController controller = creator.buildGameController();
+                controller.run();
             }
         });
         return new JScrollPane(gameTable);

@@ -162,7 +162,7 @@ public class GameFinder implements Runnable{
                 //ttl is safed at the last position of the game entry and only one char. 
                 ttl = currentGame.getTtl();
                 
-                System.out.println(currentGame);
+                //System.out.println(currentGame);
                 
                 //if ttl reached the MAX ttl, the entry will be deleted
                 if(ttl >= GAME_TTL){
