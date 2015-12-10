@@ -15,15 +15,15 @@ public class UITurnHandler extends AbstractTurnHandler {
     private BoardUI boardUI;
     Thread thread;
 
-    public BoardUI getBoardUI() {
-        return boardUI;
-    }
 
     public UITurnHandler(Board board, Player player, int lineheight, int boxwidth, Thread threadtoNotify) {
         super(board, player);
         boardUI = new BoardUI(board, 10, 50, threadtoNotify);
         thread = new Thread(boardUI);
         thread.start();
+    }
+    public BoardUI getBoardUI() {
+        return boardUI;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UITurnHandler extends AbstractTurnHandler {
 
     @Override
     public Line receiveTurn() {
-        return boardUI.lastClickedLine();
+        return boardUI.GetlastClickedLine();
     }
 
 }

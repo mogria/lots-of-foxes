@@ -18,10 +18,10 @@ import lots.of.foxes.model.Box;
  */
 public class BoxControl extends JPanel {
 
-    Box box;
-    int lineheight;
-    int boxWidth;
-    int lineoffset;
+    private Box box;
+    private int lineheight;
+    private int boxWidth;
+    private int lineoffset;
 
     public BoxControl(Box box, int lineheight, int boxWidth, int pointMultiplicator) {
         this.box = box;
