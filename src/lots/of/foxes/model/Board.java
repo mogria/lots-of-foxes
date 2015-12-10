@@ -299,6 +299,8 @@ public final class Board {
      * @return true if successful, false if line is already played
      */
     public boolean playLine(Player player, Line line) {
+        if(getPlayer(player.getPlayerNum()) != player)
+            throw new IllegalArgumentException("this player is not associated with this board");
         boxFilled = false;
         if(line == null) return false;
         if(line.getOwner() != null) return false;

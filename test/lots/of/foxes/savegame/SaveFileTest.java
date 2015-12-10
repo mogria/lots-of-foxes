@@ -17,11 +17,13 @@ public class SaveFileTest {
     
     private SaveFile saveFile;
     private Board board;
+    private Player player = new Player(0, "test player", Color.BLACK);
     
     @Before
     public void setUp() {
         saveFile = new SaveFile("test-save-game");
         board = new Board(3, 3);
+        board.setPlayer(player);
     }
     
     @After
@@ -56,7 +58,7 @@ public class SaveFileTest {
     @Test
     public void testLoad() throws IOException {
         System.out.println("load");
-        board.playLine(new Player(0, "test player", Color.BLACK), board.getLineByCoordinate(0, 1));
+        board.playLine(player, board.getLineByCoordinate(0, 1));
         saveFile.save(board);
         Board loadedBoard = saveFile.load();
         assertNull(loadedBoard.getLineByCoordinate(0, 0));
