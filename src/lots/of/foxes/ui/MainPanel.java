@@ -110,7 +110,7 @@ public class MainPanel extends JPanel implements Runnable{
                 
                 GameConfig cfg = new GameConfig(Integer.valueOf(fieldSize[0]), Integer.valueOf(fieldSize[1]), ip);
                 cfg.setGameType(GameType.REMOTE_CLIENT);
-                GameCreator creator = new GameCreator(cfg, GF_PORT);
+                GameCreator creator = new GameCreator(cfg);
                 GameController controller = creator.buildGameController();
                 controller.run();
             }
