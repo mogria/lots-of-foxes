@@ -45,12 +45,14 @@ public class Box extends GridElement {
      * of the Box.
      * 
      * @param player the player adding the line
+     * @return true of the player owns the box now
      */
-    public void addLine(Player player) {
+    public boolean addLine(Player player) {
         lineCount++;
         if(lineCount >= 4) {
             owner = player;
+            return true;
         }
-            
+        return false;    
     }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author Moritz
  */
-public class Line extends GridElement implements Serializable{
+public class Line extends GridElement implements Serializable {
 
     /**
      * boxes adjacent to this line if this line is at the border of the Board,
@@ -44,18 +44,21 @@ public class Line extends GridElement implements Serializable{
      *
      * @param owner new value of owner
      */
-    public void setOwner(Player owner) {
+    public boolean setOwner(Player owner) {
         if (owner == null) {
             throw new IllegalArgumentException("cannot reset owner of a line");
         }
 
         this.owner = owner;
 
+        boolean ownerSet = false;
         for (Box box : adjacentBoxes) {
             if (box != null) {
-                box.addLine(owner);
+                ownerSet = ownerSet || box.addLine(owner);
             }
         }
+        
+        return ownerSet;
     }
 
     /**

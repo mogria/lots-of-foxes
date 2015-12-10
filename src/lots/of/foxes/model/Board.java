@@ -37,7 +37,7 @@ public class Board implements Serializable {
      * stores all Boxes on the board
      * the key is generated out of the coordinates by genId()
      */
-    private HashMap<Integer, Box> boxes = new HashMap<>();
+    private transient HashMap<Integer, Box> boxes = new HashMap<>();
     
     /**
      * stores all Lines on the board
@@ -54,6 +54,11 @@ public class Board implements Serializable {
      * the size of the grid in the y dimension
      */
     private int gridSizeY;
+    
+    /**
+     * 
+     */
+    private boolean boxFilled;
     
     /**
      * Creates a game board, all the boxes & lines
@@ -90,6 +95,14 @@ public class Board implements Serializable {
                 }
             }
         }
+    }
+    
+    public Board(int sizeX, int sizeY, Collection<Line> playedLines) {
+        this(sizeX, sizeY);
+        playedLines.stream().forEach(line ->  {
+            lines.put(line.getId(), line);
+            playLine(line.getOwner(), line);
+        });
     }
     
     /**
@@ -204,11 +217,20 @@ public class Board implements Serializable {
      * @return true if successful, false if line is already played
      */
     public boolean playLine(Player player, Line line) {
+        boxFilled = false;
         if(line == null) return false;
         if(line.getOwner() != null) return false;
         
-        line.setOwner(player);
+        boxFilled = line.setOwner(player);
         return true;
+    }
+    
+    /**
+     * whether the last turn filled a box on the board
+     * @return true if the last turn filled a box on the board
+     */
+    public boolean getBoxFilled() {
+        return boxFilled;
     }
     
     /**
