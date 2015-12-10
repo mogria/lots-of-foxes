@@ -102,7 +102,7 @@ public class GameFinder implements Runnable{
                 receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 try {
                     socket.receive(receivePacket);
-                    String s = new String(receivePacket.getData());
+                    String s = new String(receivePacket.getData()) + ";" + receivePacket.getAddress();
                     String[] message = s.split(";");
                     //Only Messages with the correct answer statement will be safed in the ArrayList games.
                     if(message[0].equals(RESPONSE_MESSAGE)){

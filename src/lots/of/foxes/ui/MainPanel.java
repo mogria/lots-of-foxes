@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameFinder;
 import lots.of.foxes.model.RemoteGameConfig;
@@ -30,6 +32,7 @@ public class MainPanel extends JPanel implements Runnable{
     DefaultTableModel dtm;
     Thread thread;
     GameFinder gf;
+    JTable gameTable;
     
     public MainPanel(){
         setBackground(Color.WHITE);
@@ -95,8 +98,19 @@ public class MainPanel extends JPanel implements Runnable{
             }
         };
         
-        JTable gameTable = new JTable(dtm);
+        gameTable = new JTable(dtm);
                 
+        gameTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = gameTable.rowAtPoint(evt.getPoint());
+                String value = (String) dtm.getValueAt(row, 2);
+                String ip = value.substring(value.lastIndexOf("/") + 1);
+                
+                System.out.println(ip);
+                
+            }
+        });
         return new JScrollPane(gameTable);
     }
 }
