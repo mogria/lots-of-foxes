@@ -1,13 +1,9 @@
 package lots.of.foxes.ui;
 
 import java.awt.Dialog;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import lots.of.foxes.GameCreator;
 import lots.of.foxes.model.AIDifficulty;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.LocalGameConfig;
@@ -57,7 +53,6 @@ public class LocalGameDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         gameNameLabel = new javax.swing.JLabel();
         gameNameTextBox = new javax.swing.JTextField();
@@ -103,10 +98,6 @@ public class LocalGameDialog extends JDialog {
         getContentPane().add(enemyDifficultyLabel, gridBagConstraints);
 
         enemyDifficultyComboBox.setModel(new DefaultComboBoxModel(AIDifficulty.values()));
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedDifficulty}"), enemyDifficultyComboBox, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "selectedDifficulty");
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 8;
@@ -169,8 +160,6 @@ public class LocalGameDialog extends JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(startButton, gridBagConstraints);
 
-        bindingGroup.bind();
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -219,6 +208,5 @@ public class LocalGameDialog extends JDialog {
     private javax.swing.JLabel sizeYLabel;
     private javax.swing.JTextField sizeYTextBox;
     private javax.swing.JButton startButton;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

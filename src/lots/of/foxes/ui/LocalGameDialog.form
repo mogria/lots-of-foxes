@@ -57,11 +57,6 @@
           <Connection code="new DefaultComboBoxModel(AIDifficulty.values())" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selectedItem" source="Form" sourcePath="${selectedDifficulty}" target="enemyDifficultyComboBox" targetPath="selectedItem" updateStrategy="0" immediately="false">
-          <Property name="name" type="java.lang.String" value="selectedDifficulty"/>
-        </BindingProperty>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="4" gridY="8" gridWidth="3" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
