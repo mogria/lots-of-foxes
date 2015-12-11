@@ -77,11 +77,10 @@ public class MainPanel extends JPanel implements Runnable {
             }
         }
         try {
-            thread.sleep(1000);
+            gf.stop();
         } catch (InterruptedException ex) {
             Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //gf.socket.close();
     }
 
     private JPanel initButtons() {
@@ -100,7 +99,7 @@ public class MainPanel extends JPanel implements Runnable {
         createRemoteGame.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //that.shouldSearchforClients = false;
+                that.shouldSearchforClients = false;
                 java.awt.EventQueue.invokeLater(() -> {
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame, GameType.REMOTE_HOST);
