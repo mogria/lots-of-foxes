@@ -1,5 +1,6 @@
 package lots.of.foxes.ui.game;
 
+import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -29,8 +30,9 @@ public class UITurnHandler extends AbstractTurnHandler {
         this.parentThread = parentThread;
         boardUI = new BoardUI(board, 10, 50, turnLock);
         gameInfo = new GameInfo();
-        frame.add(boardUI);
-        frame.add(gameInfo);
+        frame.setLayout(new BorderLayout());
+        frame.add(boardUI, BorderLayout.WEST);
+        frame.add(gameInfo, BorderLayout.EAST);
         uiThread = new Thread(boardUI);
         uiThread.start();
     }
@@ -40,6 +42,8 @@ public class UITurnHandler extends AbstractTurnHandler {
 
     @Override
     public void sendTurn(Line line) {
+        gameInfo.setEnemy();
+        gameInfo.repaint();
         boardUI.repaint();
     }
 
@@ -52,6 +56,8 @@ public class UITurnHandler extends AbstractTurnHandler {
         } catch (InterruptedException ex) {
             Logger.getLogger(UITurnHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        gameInfo.setYou();
+        gameInfo.repaint();
         return boardUI.GetlastClickedLine();
     }
 

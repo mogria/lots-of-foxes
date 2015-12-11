@@ -149,6 +149,7 @@ public class MainPanel extends JPanel implements Runnable {
                         LocalGameConfig localConfig = newLocalGameDialog.getLocalGameConfig();
                         localConfig.setMainFrame(mainFrame);
                         mainFrame.remove(that);
+                        mainFrame.repaint();
                         GameCreator creator;
                         try {
                             creator = new GameCreator(localConfig);
