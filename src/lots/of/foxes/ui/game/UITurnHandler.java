@@ -29,7 +29,7 @@ public class UITurnHandler extends AbstractTurnHandler {
         super(board, player);
         this.parentThread = parentThread;
         boardUI = new BoardUI(board, 10, 50, turnLock);
-        gameInfo = new GameInfo();
+        gameInfo = new GameInfo(board.getPlayer(0), board.getPlayer(1));
         frame.setLayout(new BorderLayout());
         frame.add(boardUI, BorderLayout.WEST);
         frame.add(gameInfo, BorderLayout.EAST);
@@ -48,6 +48,7 @@ public class UITurnHandler extends AbstractTurnHandler {
     @Override
     public void sendTurn(Line line) {
         boardUI.repaint();
+        gameInfo.updatePoints();
     }
 
     @Override
@@ -64,6 +65,7 @@ public class UITurnHandler extends AbstractTurnHandler {
 
         gameInfo.setEnemy();
         gameInfo.repaint();
+        gameInfo.updatePoints();
         return boardUI.GetlastClickedLine();
     }
 

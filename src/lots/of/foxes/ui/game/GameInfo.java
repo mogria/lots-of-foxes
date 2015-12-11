@@ -6,6 +6,7 @@
 package lots.of.foxes.ui.game;
 
 import java.awt.Color;
+import lots.of.foxes.model.Player;
 
 /**
  *
@@ -13,10 +14,14 @@ import java.awt.Color;
  */
 public class GameInfo extends javax.swing.JPanel {
 
+    private Player you;
+    private Player enemy;
     /**
      * Creates new form GameInfo
      */
-    public GameInfo() {
+    public GameInfo(Player you, Player enemy) {
+        this.you = you;
+        this.enemy = enemy;
         initComponents();
     }
 
@@ -30,9 +35,9 @@ public class GameInfo extends javax.swing.JPanel {
     private void initComponents() {
 
         jPlayer1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        youPoint = new javax.swing.JTextField();
         jPlayer2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        enemyPoint = new javax.swing.JTextField();
         turnInfo = new javax.swing.JTextField();
 
         setMaximumSize(new java.awt.Dimension(170, 97));
@@ -47,9 +52,9 @@ public class GameInfo extends javax.swing.JPanel {
             }
         });
 
-        jTextField2.setEditable(false);
-        jTextField2.setBackground(new java.awt.Color(255, 0, 0));
-        jTextField2.setText("0");
+        youPoint.setEditable(false);
+        youPoint.setBackground(new java.awt.Color(255, 0, 0));
+        youPoint.setText("0");
 
         jPlayer2.setEditable(false);
         jPlayer2.setBackground(new java.awt.Color(0, 0, 255));
@@ -61,10 +66,10 @@ public class GameInfo extends javax.swing.JPanel {
             }
         });
 
-        jTextField3.setEditable(false);
-        jTextField3.setBackground(new java.awt.Color(0, 0, 255));
-        jTextField3.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField3.setText("0");
+        enemyPoint.setEditable(false);
+        enemyPoint.setBackground(new java.awt.Color(0, 0, 255));
+        enemyPoint.setForeground(new java.awt.Color(255, 255, 255));
+        enemyPoint.setText("0");
 
         turnInfo.setEditable(false);
         turnInfo.setBackground(new java.awt.Color(255, 255, 255));
@@ -83,11 +88,11 @@ public class GameInfo extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPlayer1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(youPoint, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPlayer2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(enemyPoint, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -97,11 +102,11 @@ public class GameInfo extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPlayer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(youPoint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPlayer2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(enemyPoint, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(turnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(66, Short.MAX_VALUE))
@@ -119,20 +124,26 @@ public class GameInfo extends javax.swing.JPanel {
     public void setEnemy(){
         turnInfo.setVisible(true);
         turnInfo.setText("Enemy's turn!");
+        turnInfo.setForeground(Color.white);
         turnInfo.setBackground(Color.blue);
     }
     
     public void setYou(){
         turnInfo.setVisible(true);
         turnInfo.setText("Your turn!");
+        turnInfo.setForeground(Color.black);
         turnInfo.setBackground(Color.red);
     }
 
+    public void updatePoints(){
+        youPoint.setText("" + you.getBoxCount());
+        enemyPoint.setText("" + enemy.getBoxCount());
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField enemyPoint;
     private javax.swing.JTextField jPlayer1;
     private javax.swing.JTextField jPlayer2;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField turnInfo;
+    private javax.swing.JTextField youPoint;
     // End of variables declaration//GEN-END:variables
 }
