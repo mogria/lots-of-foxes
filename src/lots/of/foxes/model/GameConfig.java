@@ -1,5 +1,7 @@
 package lots.of.foxes.model;
 
+import javax.swing.JFrame;
+
 /**
  * Stores the configuration for a Game
  * 
@@ -31,6 +33,11 @@ public class GameConfig {
      * the type of this game
      */
     private GameType gameType;
+    
+    /**
+     * the frame the application should be run on
+     */
+    private JFrame mainFrame;
 
     /**
      * constructor
@@ -133,5 +140,21 @@ public class GameConfig {
      */
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public JFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    /**
+     * 
+     * @param mainFrame 
+     */
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
     }
 }

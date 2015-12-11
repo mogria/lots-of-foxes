@@ -81,6 +81,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runna
         }).forEach((bc) -> {
             this.add(bc);
         });
+        
     }
 
     /**
@@ -195,6 +196,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runna
     @Override
     public void run() {
         this.repaint();
+        this.setVisible(true);
     }
 
 }

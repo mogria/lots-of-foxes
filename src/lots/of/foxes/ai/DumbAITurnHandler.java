@@ -36,9 +36,9 @@ public class DumbAITurnHandler extends AbstractTurnHandler {
      */
     @Override
     public Line receiveTurn() {
-        Line[] availableLines = (Line[])board.getLines().stream()
-                .filter(line -> line.getOwner() != null).toArray();
-        return availableLines[new Random().nextInt(availableLines.length)];
+        Object[] availableLines = (Object[])board.getLines().stream()
+                .filter(line -> line.getOwner() == null).toArray();
+        return (Line)availableLines[new Random().nextInt(availableLines.length)];
     }
 
 

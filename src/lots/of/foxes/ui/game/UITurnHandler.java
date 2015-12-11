@@ -1,5 +1,6 @@
 package lots.of.foxes.ui.game;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import lots.of.foxes.AbstractTurnHandler;
 import lots.of.foxes.model.Board;
@@ -16,9 +17,10 @@ public class UITurnHandler extends AbstractTurnHandler {
     Thread thread;
 
 
-    public UITurnHandler(Board board, Player player, int lineheight, int boxwidth, Thread threadtoNotify) {
+    public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread threadtoNotify) {
         super(board, player);
         boardUI = new BoardUI(board, 10, 50, threadtoNotify);
+        frame.add(boardUI);
         thread = new Thread(boardUI);
         thread.start();
     }

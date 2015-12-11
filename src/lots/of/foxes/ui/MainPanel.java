@@ -2,26 +2,33 @@ package lots.of.foxes.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameCreator;
 import lots.of.foxes.GameController;
 import lots.of.foxes.GameFinder;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.GameConfig;
+import lots.of.foxes.model.LocalGameConfig;
 import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  *
  * @author Marcel
  */
-public class MainPanel extends JPanel implements Runnable{
+public class MainPanel extends JPanel implements Runnable {
     
     private static final int UDP_PORT = 6969;
     private static final int TCP_PORT = 6969;
@@ -30,6 +37,8 @@ public class MainPanel extends JPanel implements Runnable{
     Thread thread;
     GameFinder gf;
     JTable gameTable;
+    
+    JButton createLocalGameButton = new JButton("Create Local Game");
     
     public MainPanel(){
         setBackground(Color.WHITE);
@@ -76,6 +85,31 @@ public class MainPanel extends JPanel implements Runnable{
         JButton settingsButton = new JButton("Settings");
         
         buttonPanel.add(startButton);
+        buttonPanel.add(createLocalGameButton);
+        JPanel that = this;
+        createLocalGameButton.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                java.awt.EventQueue.invokeLater(() -> {
+                    JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
+                    LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame);
+                    newLocalGameDialog.setVisible(true);
+                    if(newLocalGameDialog.isStartGramePressed()) {
+                        LocalGameConfig localConfig = newLocalGameDialog.getLocalGameConfig();
+                        localConfig.setMainFrame(mainFrame);
+                        mainFrame.remove(that);
+                        GameCreator creator;
+                        try {
+                            creator = new GameCreator(localConfig); 
+                            creator.buildGameController().run();
+                        } catch (GameCreator.GameCreationException ex) {
+                            JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+            }
+        
+        });
         buttonPanel.add(loadButton);
         buttonPanel.add(settingsButton);
         
@@ -98,9 +132,9 @@ public class MainPanel extends JPanel implements Runnable{
         gameTable = new JTable(dtm);
         
         
-        gameTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        gameTable.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 try {
                     int row = gameTable.rowAtPoint(evt.getPoint());
                     // TODO: let's hope the row index doesn't change :-)

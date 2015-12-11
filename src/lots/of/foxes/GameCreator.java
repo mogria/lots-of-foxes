@@ -10,6 +10,7 @@ import lots.of.foxes.model.LocalGameConfig;
 import lots.of.foxes.model.Player;
 import lots.of.foxes.model.RemoteGameConfig;
 import lots.of.foxes.savegame.SaveFile;
+import lots.of.foxes.ui.game.UITurnHandler;
 
 /**
  *
@@ -67,7 +68,7 @@ public final class GameCreator {
     }
 
     private LocalGameConfig getLocalConfig() throws GameCreationException {
-        if(!(config instanceof RemoteGameConfig)) {
+        if(!(config instanceof LocalGameConfig)) {
             throw new GameCreationException("invalid configuration for local game");
         }
         
@@ -117,7 +118,10 @@ public final class GameCreator {
      * @return an UITurnHandler instance
      */
     public ITurnHandler buildUITurnHandler() {
-        return null;
+        if(config.getMainFrame() == null) { 
+            throw new IllegalArgumentException("no frame to place UI handler on");
+        }
+        return new UITurnHandler(config.getMainFrame(), board, board.getPlayer(0), 20, 100, java.lang.Thread.currentThread());
     }
     
     /**
