@@ -81,7 +81,7 @@ public class MainPanel extends JPanel implements Runnable {
         } catch (InterruptedException ex) {
             Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        gf.socket.close();
+        //gf.socket.close();
     }
 
     private JPanel initButtons() {
@@ -114,7 +114,7 @@ public class MainPanel extends JPanel implements Runnable {
 
                             creator = new GameCreator(remoteConfig);
 
-                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), remoteConfig.getPort());
+                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), UDP_PORT);
                            // sbThread.start();
 
                             
