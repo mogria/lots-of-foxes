@@ -22,6 +22,8 @@ import lots.of.foxes.ui.game.UITurnHandler;
  * @author Moritz
  */
 public final class GameCreator {
+
+
     
     public class GameCreationException extends Exception {
 

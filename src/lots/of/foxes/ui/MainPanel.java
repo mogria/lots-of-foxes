@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameCreator;
 import lots.of.foxes.GameController;
 import lots.of.foxes.GameFinder;
+import lots.of.foxes.GameThread;
 import lots.of.foxes.ServerBroadcast;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.GameConfig;
@@ -81,6 +82,7 @@ public class MainPanel extends JPanel implements Runnable {
         } catch (InterruptedException ex) {
             Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     private JPanel initButtons() {
@@ -108,21 +110,22 @@ public class MainPanel extends JPanel implements Runnable {
                         RemoteGameConfig remoteConfig = newLocalGameDialog.getRemoteGameConfig();
                         remoteConfig.setMainFrame(mainFrame);
                         mainFrame.remove(that);
-                        GameCreator creator;
-                        try {
-
-                            creator = new GameCreator(remoteConfig);
-
-                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(),remoteConfig.getBoardSizeX(),remoteConfig.getBoardSizeY(), UDP_PORT);
-                           // sbThread.start();
-
-                            
-                             Thread thread = new Thread(creator.buildGameController(serverBroadcast));
-                             thread.start();
+                        mainFrame.repaint();
+                        Thread thread = new Thread(new GameThread(remoteConfig));
+                        thread.start();
+                        /*
+                         GameCreator creator;
+                         try {
+                         creator = new GameCreator(remoteConfig);
+                         ServerBroadcast serverBroadcast = 
+                         new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(),remoteConfig.getBoardSizeX(),remoteConfig.getBoardSizeY(), UDP_PORT);
+                           
+                         Thread thread = new Thread(creator.buildGameController(serverBroadcast));
+                         thread.start();
                              
-                        } catch (GameCreator.GameCreationException ex) {
-                            JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
-                        }
+                         } catch (GameCreator.GameCreationException ex) {
+                         JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
+                         }*/
                     }
                 });
             }
@@ -142,7 +145,7 @@ public class MainPanel extends JPanel implements Runnable {
                         mainFrame.remove(that);
                         GameCreator creator;
                         try {
-                            creator = new GameCreator(localConfig); 
+                            creator = new GameCreator(localConfig);
                             Thread thread = new Thread(creator.buildGameController());
                             thread.start();
                         } catch (GameCreator.GameCreationException ex) {
@@ -179,15 +182,20 @@ public class MainPanel extends JPanel implements Runnable {
             public void mouseClicked(MouseEvent evt) {
                 try {
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
+                    mainFrame.remove(that);
+                    mainFrame.repaint();
                     int row = gameTable.rowAtPoint(evt.getPoint());
                     // TODO: let's hope the row index doesn't change :-)
                     GameConfig cfg = gf.getGames().get(row);
                     cfg.setGameType(GameType.REMOTE_CLIENT);
                     cfg.setMainFrame(mainFrame);
-                    GameCreator creator = new GameCreator(cfg);
-                    GameController controller = creator.buildGameController();
-                    controller.run();
-                } catch (GameCreator.GameCreationException ex) {
+                    Thread thread = new Thread(new GameThread(cfg));
+                    thread.start();
+
+                    /*GameCreator creator = new GameCreator(cfg);
+                     GameController controller = creator.buildGameController();
+                     controller.run();*/
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(gameTable.getParent(), ex, "Couldn't create game", JOptionPane.ERROR_MESSAGE);
                 }
             }

@@ -35,7 +35,7 @@ public class HostRemoteTurnHandler extends NetworkTurnHandler {
             serverSocket = new ServerSocket(this.portNumber);
             System.out.println("Server startet.");
             clientSocket = serverSocket.accept();
-            //threadToKill.stop();
+            sb.stop();
             System.out.println("Connection established.");
         }
         catch(IOException e){
