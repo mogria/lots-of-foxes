@@ -164,7 +164,7 @@ public final class GameCreator {
      */
     public ITurnHandler buildHostRemoteTurnHandler(ServerBroadcast sb) throws GameCreationException {
         RemoteGameConfig remoteConfig = getRemoteConfig();
-        return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(0),sb);
+        return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(1),sb);
     }
     
     /**
