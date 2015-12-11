@@ -28,14 +28,14 @@ public class HostRemoteTurnHandler extends NetworkTurnHandler {
      * @param board
      * @param player 
      */
-    public HostRemoteTurnHandler(int port, Board board, Player player,Thread threadToKill) {
+    public HostRemoteTurnHandler(int port, Board board, Player player,ServerBroadcast sb) {
         super(board, player);
         this.portNumber = port;
         try{
             serverSocket = new ServerSocket(this.portNumber);
             System.out.println("Server startet.");
             clientSocket = serverSocket.accept();
-            threadToKill.stop();
+            //threadToKill.stop();
             System.out.println("Connection established.");
         }
         catch(IOException e){

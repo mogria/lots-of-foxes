@@ -100,7 +100,7 @@ public class MainPanel extends JPanel implements Runnable {
         createRemoteGame.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                that.shouldSearchforClients = false;
+                //that.shouldSearchforClients = false;
                 java.awt.EventQueue.invokeLater(() -> {
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame, GameType.REMOTE_HOST);
@@ -114,11 +114,11 @@ public class MainPanel extends JPanel implements Runnable {
 
                             creator = new GameCreator(remoteConfig);
 
-                           Thread sbThread = new Thread(new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), remoteConfig.getPort()));
+                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), remoteConfig.getPort());
                            // sbThread.start();
 
                             
-                             Thread thread = new Thread(creator.buildGameController(sbThread));
+                             Thread thread = new Thread(creator.buildGameController(serverBroadcast));
                              thread.start();
                              
                         } catch (GameCreator.GameCreationException ex) {
