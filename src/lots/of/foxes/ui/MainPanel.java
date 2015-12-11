@@ -141,7 +141,9 @@ public class MainPanel extends JPanel implements Runnable {
         createLocalGameButton.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                 
                 java.awt.EventQueue.invokeLater(() -> {
+                    that.shouldSearchforClients = false;
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame);
                     newLocalGameDialog.setVisible(true);
