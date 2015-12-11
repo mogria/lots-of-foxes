@@ -40,6 +40,7 @@ public class GameFinder implements Runnable {
     // Entry structure: RESPONSE_MESSAGE;name of the game;version of the application;size of the gamefield;IP of the server;time to live
     private DatagramSocket socket; //Datagram socket for UDP communication
     private boolean isRunning = true;
+    private boolean canContinue = false;
 
     /**
      * The constructor set the port, builds the datagram packet and starts the
@@ -87,9 +88,12 @@ public class GameFinder implements Runnable {
             System.out.println("Error while starting socket: " + ex);
         } finally {
             socket.close();
+            this.canContinue = true;
         }
     }
-
+    public boolean canContinue(){
+        return canContinue;
+    }
     public void stop() throws InterruptedException {
         answer.stop();
         this.isRunning = false;

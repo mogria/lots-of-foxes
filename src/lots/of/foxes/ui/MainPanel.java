@@ -25,6 +25,7 @@ import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.LocalGameConfig;
 import lots.of.foxes.model.RemoteGameConfig;
+import sun.swing.SwingUtilities2;
 
 /**
  *
@@ -79,6 +80,9 @@ public class MainPanel extends JPanel implements Runnable {
         }
         try {
             gf.stop();
+            while (!gf.canContinue()){
+                thread.sleep(100);
+            }
         } catch (InterruptedException ex) {
             Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,14 +105,16 @@ public class MainPanel extends JPanel implements Runnable {
         createRemoteGame.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                that.shouldSearchforClients = false;
+               that.shouldSearchforClients = false;
                 java.awt.EventQueue.invokeLater(() -> {
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame, GameType.REMOTE_HOST);
                     newLocalGameDialog.setVisible(true);
                     if (newLocalGameDialog.isStartGramePressed()) {
+                        
                         RemoteGameConfig remoteConfig = newLocalGameDialog.getRemoteGameConfig();
                         remoteConfig.setMainFrame(mainFrame);
+                        remoteConfig.setDoIStartFirst(true);
                         mainFrame.remove(that);
                         mainFrame.repaint();
                         Thread thread = new Thread(new GameThread(remoteConfig));
@@ -181,6 +187,8 @@ public class MainPanel extends JPanel implements Runnable {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 try {
+                    that.shouldSearchforClients = false;
+                    
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     mainFrame.remove(that);
                     mainFrame.repaint();
