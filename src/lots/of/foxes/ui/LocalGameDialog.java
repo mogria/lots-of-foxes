@@ -1,6 +1,8 @@
 package lots.of.foxes.ui;
 
 import java.awt.Dialog;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -55,6 +57,7 @@ public class LocalGameDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         gameNameLabel = new javax.swing.JLabel();
         gameNameTextBox = new javax.swing.JTextField();
@@ -69,15 +72,14 @@ public class LocalGameDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 60, 0, 60, 0};
-        layout.rowHeights = new int[] {0, 25, 0, 25, 0};
+        layout.columnWidths = new int[] {0, 20, 80, 20, 80, 20, 80, 20, 0};
+        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
         gameNameLabel.setText("Game Name");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(gameNameLabel, gridBagConstraints);
 
@@ -87,59 +89,58 @@ public class LocalGameDialog extends JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(gameNameTextBox, gridBagConstraints);
 
         enemyDifficultyLabel.setText("Enemy Difficulty");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(enemyDifficultyLabel, gridBagConstraints);
 
         enemyDifficultyComboBox.setModel(new DefaultComboBoxModel(AIDifficulty.values()));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedDifficulty}"), enemyDifficultyComboBox, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"), "selectedDifficulty");
+        bindingGroup.addBinding(binding);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(enemyDifficultyComboBox, gridBagConstraints);
 
         sizeXLabel.setText("Board Width");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(sizeXLabel, gridBagConstraints);
 
         sizeXTextBox.setText("3");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(sizeXTextBox, gridBagConstraints);
 
         sizeYLabel.setText("Board Height");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(sizeYLabel, gridBagConstraints);
 
         sizeYTextBox.setText("3");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(sizeYTextBox, gridBagConstraints);
 
@@ -150,9 +151,9 @@ public class LocalGameDialog extends JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(abortButton, gridBagConstraints);
 
         startButton.setText("Start");
@@ -162,9 +163,13 @@ public class LocalGameDialog extends JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(startButton, gridBagConstraints);
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -184,7 +189,12 @@ public class LocalGameDialog extends JDialog {
     }//GEN-LAST:event_startButtonActionPerformed
 
     public LocalGameConfig getLocalGameConfig() {
-        LocalGameConfig localGameConfig = new LocalGameConfig(Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), gameNameTextBox.getText(), false, AIDifficulty.LOW);
+        LocalGameConfig localGameConfig = new LocalGameConfig(
+                Integer.parseInt(sizeXTextBox.getText()),
+                Integer.parseInt(sizeYTextBox.getText()),
+                gameNameTextBox.getText(),
+                false,
+                (AIDifficulty)enemyDifficultyComboBox.getSelectedItem());
         localGameConfig.setGameType(GameType.LOCAL_AI);
         return localGameConfig;
     }
@@ -209,5 +219,6 @@ public class LocalGameDialog extends JDialog {
     private javax.swing.JLabel sizeYLabel;
     private javax.swing.JTextField sizeYTextBox;
     private javax.swing.JButton startButton;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

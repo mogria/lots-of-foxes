@@ -143,7 +143,7 @@ public class MainPanel extends JPanel implements Runnable {
                         mainFrame.remove(that);
                         GameCreator creator;
                         try {
-                            creator = new GameCreator(localConfig);
+                            creator = new GameCreator(localConfig); 
                             Thread thread = new Thread(creator.buildGameController());
                             thread.start();
                         } catch (GameCreator.GameCreationException ex) {

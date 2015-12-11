@@ -34,14 +34,15 @@ public class GameController implements Runnable {
     public void run() {
         while(!hasGameEnded()) { 
             Line turnLine = getCurrent().receiveTurn();
-            board.playLine(getCurrent().getPlayer(), turnLine);
-            getCurrent().sendTurn(turnLine);
-            // only swap players if no box has been filled
-            if(!board.getBoxFilled()) {
-                swap();
+            if(turnLine != null) {
+                board.playLine(getCurrent().getPlayer(), turnLine);
+                getCurrent().sendTurn(turnLine);
+                // only swap players if no box has been filled
+                if(!board.getBoxFilled()) {
+                    swap();
+                }
             }
         }
-        
     }
     
     public void swap() {
