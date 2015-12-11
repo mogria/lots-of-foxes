@@ -85,9 +85,9 @@ public final class GameCreator {
             default:
             case LOCAL_AI:
                 return new GameController(config, board, buildUITurnHandler(), buildAITurnHandler());
-            case REMOTE_CLIENT:
-                return new GameController(config, board, buildUITurnHandler(), buildHostRemoteTurnHandler());
             case REMOTE_HOST:
+                return new GameController(config, board, buildUITurnHandler(), buildHostRemoteTurnHandler());
+            case REMOTE_CLIENT:
                 return new GameController(config, board, buildUITurnHandler(), buildClientRemoteTurnHandler());
                     
         } 

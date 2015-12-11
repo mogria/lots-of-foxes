@@ -106,6 +106,7 @@ public class GameFinder implements Runnable{
                     String[] message = s.split(";");
                     String address = receivePacket.getAddress().toString();
                     address = address.substring(address.lastIndexOf("/") + 1);
+                    System.out.println(message[0]);
                     //Only Messages with the correct answer statement will be safed in the ArrayList games.
                     if(message[0].equals(RESPONSE_MESSAGE)){
                         //System.out.println("received: " + message[0]);
