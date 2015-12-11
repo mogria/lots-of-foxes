@@ -24,7 +24,7 @@ import lots.of.foxes.model.Player;
  *
  * @author Adrian
  */
-public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runnable {
+public class BoardUI extends JPanel implements MouseListener, ITurnHandler, Runnable {
 
    private Collection<LineControl> linesControls = new ArrayList<>();
     private Collection<BoxControl> boxControls = new ArrayList<>();
@@ -35,37 +35,14 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runna
     private int gridX;
     private int gridY;
     private int pointMultiplicator = 2;
-    private Thread threadToNotify;
+    private Object turnLock;
 
-    public BoardUI(Collection<Line> lines, Collection<Box> boxes, int gridX, int gridY, int lineheight, int boxWidth,Thread threadToNotify) {
-        this.lineheight = lineheight;
-        this.boxWidth = boxWidth;
-        this.gridX = gridX / 2 + 1;
-        this.gridY = gridY / 2 + 1;
-        this.threadToNotify = threadToNotify;
-        InitializeBoard();
-
-        lines.stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
-            linesControls.add(lc);
-            return lc;
-        }).forEach((lc) -> {
-            this.add(lc);
-        });
-
-        boxes.stream().map((b) -> new BoxControl(b, lineheight, boxWidth, pointMultiplicator)).map((bc) -> {
-            boxControls.add(bc);
-            return bc;
-        }).forEach((bc) -> {
-            this.add(bc);
-        });
-
-    }
-
-    public BoardUI(Board b, int lineheight, int boxWidth,Thread threadToNotify) {
+    public BoardUI(Board b, int lineheight, int boxWidth, Object turnLock) {
         this.lineheight = lineheight;
         this.boxWidth = boxWidth;
         this.gridX = b.getGridSizeX() / 2 + 1;
         this.gridY = b.getGridSizeX() / 2 + 1;
+        this.turnLock = turnLock;
 
         InitializeBoard();
         b.getLines().stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
@@ -157,7 +134,9 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler,Runna
         if (l != null) {
             
             this.lastClickedLine = l;
-            threadToNotify.notify();
+            synchronized(turnLock) {
+                turnLock.notifyAll();
+            }
          
         } else {
             this.lastClickedLine = null;

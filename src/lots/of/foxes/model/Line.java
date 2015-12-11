@@ -72,7 +72,8 @@ public class Line extends GridElement implements Serializable {
         boolean ownerSet = false;
         for (Box box : adjacentBoxes) {
             if (box != null) {
-                ownerSet = ownerSet || box.addLine(owner);
+                boolean ret = box.addLine(owner);
+                ownerSet = ownerSet || ret;
             }
         }
         

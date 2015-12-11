@@ -8,7 +8,7 @@ import lots.of.foxes.model.Line;
  * Responsible for turn management and ending the game
  * @author Moritz
  */
-public class GameController {
+public class GameController implements Runnable {
     
     private final Board board;
     private final GameConfig config;
@@ -30,6 +30,7 @@ public class GameController {
         currentHandlerIndex = config.getDoIStartFirst() ? 0 : 1;
     }
     
+    @Override
     public void run() {
         while(!hasGameEnded()) { 
             Line turnLine = getCurrent().receiveTurn();

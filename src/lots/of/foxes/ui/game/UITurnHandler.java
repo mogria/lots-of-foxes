@@ -1,5 +1,7 @@
 package lots.of.foxes.ui.game;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import lots.of.foxes.AbstractTurnHandler;
@@ -14,15 +16,20 @@ import lots.of.foxes.model.Player;
 public class UITurnHandler extends AbstractTurnHandler {
 
     private BoardUI boardUI;
-    Thread thread;
+    
+    private Thread parentThread;
+    private Thread uiThread;
+    
+    private final Object turnLock = new Object();
 
 
-    public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread threadtoNotify) {
+    public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread parentThread) {
         super(board, player);
-        boardUI = new BoardUI(board, 10, 50, threadtoNotify);
+        this.parentThread = parentThread;
+        boardUI = new BoardUI(board, 10, 50, turnLock);
         frame.add(boardUI);
-        thread = new Thread(boardUI);
-        thread.start();
+        uiThread = new Thread(boardUI);
+        uiThread.start();
     }
     public BoardUI getBoardUI() {
         return boardUI;
@@ -35,6 +42,13 @@ public class UITurnHandler extends AbstractTurnHandler {
 
     @Override
     public Line receiveTurn() {
+        try {
+            synchronized(turnLock) {
+                turnLock.wait();
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(UITurnHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return boardUI.GetlastClickedLine();
     }
 
