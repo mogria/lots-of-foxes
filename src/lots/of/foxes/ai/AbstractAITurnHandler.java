@@ -17,7 +17,7 @@ public abstract class AbstractAITurnHandler extends AbstractTurnHandler {
 
     public AbstractAITurnHandler(Board board, Player player) {
         super(board, player);
-        enemyLines = new ArrayList<>(enemyLines);
+        enemyLines = new ArrayList<>();
     }
 
     public List<Line> getEnemyLines() {
