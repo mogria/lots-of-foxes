@@ -38,7 +38,8 @@ public class GameFinder implements Runnable {
     private DatagramPacket sendPacket; //Packet to send
     private ArrayList<RemoteGameConfig> games = new ArrayList<>(); //list of available games
     // Entry structure: RESPONSE_MESSAGE;name of the game;version of the application;size of the gamefield;IP of the server;time to live
-    public DatagramSocket socket; //Datagram socket for UDP communication
+    private DatagramSocket socket; //Datagram socket for UDP communication
+    private boolean isRunning = true;
 
     /**
      * The constructor set the port, builds the datagram packet and starts the
@@ -60,6 +61,7 @@ public class GameFinder implements Runnable {
             thread.start();
         }
     }
+    AnswerHandler answer;
 
     /**
      * This method handles the Thread. It starts also the a new Thread of the
@@ -70,15 +72,16 @@ public class GameFinder implements Runnable {
         try {
             socket = new DatagramSocket(port);
             socket.setBroadcast(true);
-            AnswerHandler answer = new AnswerHandler();
+            answer = new AnswerHandler();
             new Thread(answer).start();
-            while (true && !socket.isClosed()) {
+            while (isRunning) {
                 //This loop sends a multicast, update the game list and waits defined time.
                 socket.send(sendPacket);
                 //System.out.println("Broadcast sent to " + group.getHostAddress());
                 Thread.sleep(BROADCAST_SLEEP_TIME);
                 updateList();
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Error while starting socket: " + ex);
@@ -87,11 +90,19 @@ public class GameFinder implements Runnable {
         }
     }
 
+    public void stop() throws InterruptedException {
+        answer.stop();
+        this.isRunning = false;
+    }
+
     /**
      * This class handles all answers receiving from other clients. The clients
      * are saved in the ArrayList 'games'.
      */
     public class AnswerHandler implements Runnable {
+
+        boolean isRunning = true;
+        boolean canContinue = false;
 
         /**
          * The object runs a thread, which listens to the open datagram socket
@@ -101,7 +112,8 @@ public class GameFinder implements Runnable {
         public void run() {
             byte[] receiveData;
             DatagramPacket receivePacket;
-            while (true && !socket.isClosed()) {
+            while (isRunning) {
+                canContinue = false;
                 receiveData = new byte[BYTE_DATA_SIZE];
                 receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 try {
@@ -118,10 +130,19 @@ public class GameFinder implements Runnable {
                         //System.out.println("received: " + message[0]);
                         addGame(message, address);
                     }
+                    canContinue = true;
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     System.out.println("Error while receiving UDP Packet: " + ex);
                 }
+            }
+        }
+
+        public void stop() throws InterruptedException {
+            isRunning = false;
+
+            while (!canContinue) {
+                thread.sleep(1000);
             }
         }
     }
