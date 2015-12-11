@@ -16,6 +16,7 @@ import lots.of.foxes.model.Player;
 public class UITurnHandler extends AbstractTurnHandler {
 
     private BoardUI boardUI;
+    private GameInfo gameInfo;
     
     private Thread parentThread;
     private Thread uiThread;
@@ -27,7 +28,9 @@ public class UITurnHandler extends AbstractTurnHandler {
         super(board, player);
         this.parentThread = parentThread;
         boardUI = new BoardUI(board, 10, 50, turnLock);
+        gameInfo = new GameInfo();
         frame.add(boardUI);
+        frame.add(gameInfo);
         uiThread = new Thread(boardUI);
         uiThread.start();
     }
