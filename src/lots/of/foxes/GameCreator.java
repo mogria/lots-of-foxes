@@ -80,13 +80,13 @@ public final class GameCreator {
      * @return an GameController instance
      * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public GameController buildGameController() throws GameCreationException {
+    public GameController buildGameController(Thread... th) throws GameCreationException {
         switch(config.getGameType()) {
             default:
             case LOCAL_AI:
                 return new GameController(config, board, buildUITurnHandler(), buildAITurnHandler());
             case REMOTE_HOST:
-                return new GameController(config, board, buildUITurnHandler(), buildHostRemoteTurnHandler());
+                return new GameController(config, board, buildUITurnHandler(), buildHostRemoteTurnHandler(th[0]));
             case REMOTE_CLIENT:
                 return new GameController(config, board, buildUITurnHandler(), buildClientRemoteTurnHandler());
                     
@@ -151,9 +151,9 @@ public final class GameCreator {
      * @return an HostRemoteTurnHandler instance
      * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public ITurnHandler buildHostRemoteTurnHandler() throws GameCreationException {
+    public ITurnHandler buildHostRemoteTurnHandler(Thread threadToStop) throws GameCreationException {
         RemoteGameConfig remoteConfig = getRemoteConfig();
-        return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(0));
+        return new HostRemoteTurnHandler(remoteConfig.getPort(), board, board.getPlayer(0),threadToStop);
     }
     
     /**

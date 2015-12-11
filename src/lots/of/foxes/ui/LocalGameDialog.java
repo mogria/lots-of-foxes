@@ -189,7 +189,7 @@ public class LocalGameDialog extends JDialog {
         return localGameConfig;
     }
     public RemoteGameConfig getRemoteGameConfig(){
-        RemoteGameConfig remoteGameConfig = new RemoteGameConfig(gameNameTextBox.getText(), "1.0", Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), "127.0.0.1", 6969);
+        RemoteGameConfig remoteGameConfig = new RemoteGameConfig(gameNameTextBox.getText(), "1.0", Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), "127.0.0.1", 12345);
         remoteGameConfig.setGameType(GameType.REMOTE_HOST);
         return remoteGameConfig;
     }

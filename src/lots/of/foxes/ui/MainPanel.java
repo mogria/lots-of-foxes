@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import lots.of.foxes.GameCreator;
 import lots.of.foxes.GameController;
 import lots.of.foxes.GameFinder;
+import lots.of.foxes.ServerBroadcast;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.GameConfig;
 import lots.of.foxes.model.LocalGameConfig;
@@ -37,6 +38,7 @@ public class MainPanel extends JPanel implements Runnable {
     Thread thread;
     GameFinder gf;
     JTable gameTable;
+    boolean shouldSearchforClients = true;
 
     JButton createLocalGameButton = new JButton("Create Local Game");
 
@@ -59,7 +61,7 @@ public class MainPanel extends JPanel implements Runnable {
     @Override
     public void run() {
         gf = new GameFinder(UDP_PORT);
-        while (true) {
+        while (shouldSearchforClients) {
             try {
                 thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -74,27 +76,34 @@ public class MainPanel extends JPanel implements Runnable {
                 dtm.addRow(row);
             }
         }
+        try {
+            thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        gf.socket.close();
     }
 
     private JPanel initButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.GRAY);
 
-        JButton startButton = new JButton("Start Game");
+        // JButton startButton = new JButton("Start Game");
         JButton loadButton = new JButton("Load Game");
         JButton settingsButton = new JButton("Settings");
         JButton createRemoteGame = new JButton("Host Remote Game");
 
-        buttonPanel.add(startButton);
+        //   buttonPanel.add(startButton);
         buttonPanel.add(createLocalGameButton);
         buttonPanel.add(createRemoteGame);
-        JPanel that = this;
+        MainPanel that = this;
         createRemoteGame.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                 java.awt.EventQueue.invokeLater(() -> {
+                that.shouldSearchforClients = false;
+                java.awt.EventQueue.invokeLater(() -> {
                     JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
-                    LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame,GameType.REMOTE_HOST);
+                    LocalGameDialog newLocalGameDialog = new LocalGameDialog(mainFrame, GameType.REMOTE_HOST);
                     newLocalGameDialog.setVisible(true);
                     if (newLocalGameDialog.isStartGramePressed()) {
                         RemoteGameConfig remoteConfig = newLocalGameDialog.getRemoteGameConfig();
@@ -102,9 +111,16 @@ public class MainPanel extends JPanel implements Runnable {
                         mainFrame.remove(that);
                         GameCreator creator;
                         try {
-                            creator = new GameCreator(remoteConfig); 
-                            Thread thread = new Thread(creator.buildGameController());
-                            thread.start();
+
+                            creator = new GameCreator(remoteConfig);
+
+                           Thread sbThread = new Thread(new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), remoteConfig.getPort()));
+                           // sbThread.start();
+
+                            
+                             Thread thread = new Thread(creator.buildGameController(sbThread));
+                             thread.start();
+                             
                         } catch (GameCreator.GameCreationException ex) {
                             JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
                         }
@@ -128,7 +144,8 @@ public class MainPanel extends JPanel implements Runnable {
                         GameCreator creator;
                         try {
                             creator = new GameCreator(localConfig);
-                            creator.buildGameController().run();
+                            Thread thread = new Thread(creator.buildGameController());
+                            thread.start();
                         } catch (GameCreator.GameCreationException ex) {
                             JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
                         }
