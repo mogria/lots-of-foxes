@@ -113,7 +113,7 @@ public class MainPanel extends JPanel implements Runnable {
 
                             creator = new GameCreator(remoteConfig);
 
-                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(), remoteConfig.getFieldSize(), UDP_PORT);
+                           ServerBroadcast serverBroadcast = new ServerBroadcast(remoteConfig.getGameName(), remoteConfig.getGameVersion(),remoteConfig.getBoardSizeX(),remoteConfig.getBoardSizeY(), UDP_PORT);
                            // sbThread.start();
 
                             
@@ -173,15 +173,17 @@ public class MainPanel extends JPanel implements Runnable {
         };
 
         gameTable = new JTable(dtm);
-
+        MainPanel that = this;
         gameTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 try {
+                    JFrame mainFrame = (JFrame) SwingUtilities.getRoot(that);
                     int row = gameTable.rowAtPoint(evt.getPoint());
                     // TODO: let's hope the row index doesn't change :-)
                     GameConfig cfg = gf.getGames().get(row);
                     cfg.setGameType(GameType.REMOTE_CLIENT);
+                    cfg.setMainFrame(mainFrame);
                     GameCreator creator = new GameCreator(cfg);
                     GameController controller = creator.buildGameController();
                     controller.run();
