@@ -3,6 +3,8 @@ package lots.of.foxes;
 import lots.of.foxes.model.GameConfig;
 import java.awt.Color;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import lots.of.foxes.ai.DumbAITurnHandler;
 import lots.of.foxes.ai.NotSoDumbAITurnHandler;
 import lots.of.foxes.model.Board;
@@ -81,7 +83,7 @@ public final class GameCreator {
      * @return an GameController instance
      * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public GameController buildGameController(ServerBroadcast... sb) throws GameCreationException {
+    public GameController buildGameController(ServerBroadcast... sb) throws GameCreationException, UnknownHostException {
         switch(config.getGameType()) {
             default:
             case LOCAL_AI:
@@ -166,9 +168,10 @@ public final class GameCreator {
      * @return an ClientRemoteTurnHandler instance
      * @throws lots.of.foxes.GameCreator.GameCreationException
      */
-    public ITurnHandler buildClientRemoteTurnHandler() throws GameCreationException {
+    public ITurnHandler buildClientRemoteTurnHandler() throws GameCreationException, UnknownHostException {
         RemoteGameConfig remoteConfig = getRemoteConfig();
-        return new ClientRemoteTurnHandler(board, board.getPlayer(1), null, remoteConfig.getPort());
+        InetAddress ip = InetAddress.getByName(remoteConfig.getServerIP());
+        return new ClientRemoteTurnHandler(board, board.getPlayer(1),ip, remoteConfig.getPort());
     }
     
 }
