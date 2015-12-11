@@ -51,6 +51,7 @@ public class Box extends GridElement {
         lineCount++;
         if(lineCount >= 4) {
             owner = player;
+            player.increaseBoxCount();
             return true;
         }
         return false;    
