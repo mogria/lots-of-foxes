@@ -69,6 +69,7 @@ public abstract class NetworkTurnHandler extends AbstractTurnHandler{
         {
             //line object will be received
             line = (Line)inStream.readObject();
+            System.out.println("Received Turn: " + line);
         }
         catch(IOException ex){
             System.out.println("Error in Method receiveTurn: " + ex);
