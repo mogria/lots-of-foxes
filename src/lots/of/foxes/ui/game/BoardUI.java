@@ -134,6 +134,7 @@ public class BoardUI extends JPanel implements MouseListener, ITurnHandler, Runn
         if (l != null) {
             
             this.lastClickedLine = l;
+            this.repaint();
             synchronized(turnLock) {
                 turnLock.notifyAll();
             }
