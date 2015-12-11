@@ -112,13 +112,13 @@ public class GameInfo extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPlayer2ActionPerformed
 
-    private void setEnemy(){
+    public void setEnemy(){
         turnInfo.setVisible(true);
         turnInfo.setText("Enemy's turn!");
         turnInfo.setBackground(Color.blue);
     }
     
-    private void setYou(){
+    public void setYou(){
         turnInfo.setVisible(true);
         turnInfo.setText("Your turn!");
         turnInfo.setBackground(Color.red);

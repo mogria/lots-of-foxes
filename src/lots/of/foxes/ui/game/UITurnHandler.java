@@ -42,6 +42,8 @@ public class UITurnHandler extends AbstractTurnHandler {
 
     @Override
     public void sendTurn(Line line) {
+        gameInfo.setEnemy();
+        gameInfo.repaint();
         boardUI.repaint();
     }
 
@@ -54,6 +56,8 @@ public class UITurnHandler extends AbstractTurnHandler {
         } catch (InterruptedException ex) {
             Logger.getLogger(UITurnHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        gameInfo.setYou();
+        gameInfo.repaint();
         return boardUI.GetlastClickedLine();
     }
 
