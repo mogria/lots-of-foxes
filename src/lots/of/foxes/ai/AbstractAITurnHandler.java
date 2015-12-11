@@ -1,5 +1,6 @@
 package lots.of.foxes.ai;
 
+import java.util.ArrayList;
 import java.util.List;
 import lots.of.foxes.AbstractTurnHandler;
 import lots.of.foxes.model.Board;
@@ -16,6 +17,7 @@ public abstract class AbstractAITurnHandler extends AbstractTurnHandler {
 
     public AbstractAITurnHandler(Board board, Player player) {
         super(board, player);
+        enemyLines = new ArrayList<>(enemyLines);
     }
 
     public List<Line> getEnemyLines() {
