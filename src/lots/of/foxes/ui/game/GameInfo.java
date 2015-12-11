@@ -136,6 +136,8 @@ public class GameInfo extends javax.swing.JPanel {
     }
 
     public void updatePoints(){
+        System.out.println("You: " + you.getBoxCount());
+        System.out.println("Enemy: " + you.getBoxCount());
         youPoint.setText("" + you.getBoxCount());
         enemyPoint.setText("" + enemy.getBoxCount());
     }
