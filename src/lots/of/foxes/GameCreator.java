@@ -4,6 +4,7 @@ import lots.of.foxes.model.GameConfig;
 import java.awt.Color;
 import java.io.IOException;
 import lots.of.foxes.ai.DumbAITurnHandler;
+import lots.of.foxes.ai.NotSoDumbAITurnHandler;
 import lots.of.foxes.model.Board;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.LocalGameConfig;
@@ -139,6 +140,10 @@ public final class GameCreator {
             case LOW:
                 aiPlayer = new Player(1, "DumbAI", Color.blue);
                 aiTurnHandler = new DumbAITurnHandler(board, aiPlayer);
+                break;
+            case QUITE_LOW:
+                aiPlayer = new Player(1, "NotSoDumbAI", Color.blue);
+                aiTurnHandler = new NotSoDumbAITurnHandler(board, aiPlayer);
         }
         
         board.setPlayer(aiPlayer);
