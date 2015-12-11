@@ -12,11 +12,11 @@ import javax.swing.JPanel;
  *
  * @author Dethrall
  */
-public class LofFrame extends JFrame{
+public final class LofFrame extends JFrame{
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
     
-    JPanel panel;
+    private JPanel contentPanel;
     
     public static void main(String[] args){
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -29,11 +29,19 @@ public class LofFrame extends JFrame{
     
     public LofFrame(){
         super("Lot Of Foxes");
+        this.contentPanel = null;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
                 
-        panel = new MainPanel();        
-        add(panel);
+        setContentPanel(new MainPanel());
+    }
+    
+    public void setContentPanel(JPanel newPanel) {
+        if(contentPanel != null) {
+            remove(contentPanel);
+        }
+        contentPanel = newPanel;
+        add(contentPanel);
     }
 }
