@@ -9,9 +9,11 @@ import lots.of.foxes.GameCreator;
 import lots.of.foxes.model.AIDifficulty;
 import lots.of.foxes.model.GameType;
 import lots.of.foxes.model.LocalGameConfig;
+import lots.of.foxes.model.RemoteGameConfig;
 
 /**
  * Responsible for creating a LocalGameConfig
+ *
  * @author Moritz
  */
 public class LocalGameDialog extends JDialog {
@@ -20,6 +22,7 @@ public class LocalGameDialog extends JDialog {
 
     /**
      * Creates new form LocalGameFrame
+     *
      * @param owner
      */
     public LocalGameDialog(JFrame owner) {
@@ -28,6 +31,19 @@ public class LocalGameDialog extends JDialog {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         gameNameTextBox.setText("localgame1");
         startGramePressed = false;
+    }
+
+    public LocalGameDialog(JFrame owner, GameType gameType) {
+        super(owner, gameType == GameType.LOCAL_AI ? "Create a new Local Game againt the Computer" : "", Dialog.ModalityType.APPLICATION_MODAL);
+        initComponents();
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        gameNameTextBox.setText(gameType == GameType.LOCAL_AI ? "localeGame" : "RemoteGame");
+        startGramePressed = false;
+
+        if (gameType == GameType.REMOTE_HOST) {
+            enemyDifficultyLabel.setVisible(false);
+            enemyDifficultyComboBox.setVisible(false);
+        }
     }
 
     /**
@@ -168,15 +184,20 @@ public class LocalGameDialog extends JDialog {
     }//GEN-LAST:event_startButtonActionPerformed
 
     public LocalGameConfig getLocalGameConfig() {
-        LocalGameConfig localGameConfig =  new LocalGameConfig(Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), gameNameTextBox.getText(), false, AIDifficulty.LOW);
+        LocalGameConfig localGameConfig = new LocalGameConfig(Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), gameNameTextBox.getText(), false, AIDifficulty.LOW);
         localGameConfig.setGameType(GameType.LOCAL_AI);
         return localGameConfig;
     }
-    
+    public RemoteGameConfig getRemoteGameConfig(){
+        RemoteGameConfig remoteGameConfig = new RemoteGameConfig(gameNameTextBox.getText(), "1.0", Integer.parseInt(sizeXTextBox.getText()), Integer.parseInt(sizeYTextBox.getText()), "127.0.0.1", 6969);
+        remoteGameConfig.setGameType(GameType.REMOTE_HOST);
+        return remoteGameConfig;
+    }
+
     public boolean isStartGramePressed() {
         return startGramePressed;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton abortButton;
     private javax.swing.JComboBox enemyDifficultyComboBox;
