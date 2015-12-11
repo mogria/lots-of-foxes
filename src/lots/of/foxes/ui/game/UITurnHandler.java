@@ -49,6 +49,7 @@ public class UITurnHandler extends AbstractTurnHandler {
     public void sendTurn(Line line) {
         boardUI.repaint();
         gameInfo.updatePoints();
+        gameInfo.repaint();
     }
 
     @Override
@@ -64,8 +65,8 @@ public class UITurnHandler extends AbstractTurnHandler {
         }
 
         gameInfo.setEnemy();
-        gameInfo.repaint();
         gameInfo.updatePoints();
+        gameInfo.repaint();
         return boardUI.GetlastClickedLine();
     }
 
