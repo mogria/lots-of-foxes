@@ -35,6 +35,9 @@ public class GameInfo extends javax.swing.JPanel {
         jTextField3 = new javax.swing.JTextField();
         turnInfo = new javax.swing.JTextField();
 
+        setMaximumSize(new java.awt.Dimension(170, 97));
+        setMinimumSize(new java.awt.Dimension(170, 97));
+
         jPlayer1.setEditable(false);
         jPlayer1.setBackground(new java.awt.Color(255, 0, 0));
         jPlayer1.setText("You");
@@ -63,8 +66,9 @@ public class GameInfo extends javax.swing.JPanel {
         jTextField3.setForeground(new java.awt.Color(255, 255, 255));
         jTextField3.setText("0");
 
+        turnInfo.setEditable(false);
+        turnInfo.setBackground(new java.awt.Color(255, 255, 255));
         turnInfo.setText("TurnInfo");
-        turnInfo.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -98,9 +102,9 @@ public class GameInfo extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPlayer2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(turnInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(turnInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -128,7 +128,7 @@ public final class GameCreator {
         if(config.getMainFrame() == null) { 
             throw new IllegalArgumentException("no frame to place UI handler on");
         }
-        return new UITurnHandler(config.getMainFrame(), board, board.getPlayer(0), 20, 100, java.lang.Thread.currentThread());
+        return new UITurnHandler(config.getMainFrame(), board, board.getPlayer(0), 20, 100, java.lang.Thread.currentThread(), config.getDoIStartFirst());
     }
     
     /**
