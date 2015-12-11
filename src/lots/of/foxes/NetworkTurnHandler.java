@@ -47,8 +47,9 @@ public abstract class NetworkTurnHandler extends AbstractTurnHandler{
      */
     @Override
     public void sendTurn(Line line) {
-        try(ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream()))
+        try
         {
+            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
             //line object will be serialized and sent
             outStream.writeObject(line);
         }
@@ -65,8 +66,9 @@ public abstract class NetworkTurnHandler extends AbstractTurnHandler{
     @Override
     public Line receiveTurn() {
         Line line = new Line(0, null, null);
-        try(ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream()))
+        try
         {
+            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
             //line object will be received
             line = (Line)inStream.readObject();
             System.out.println("Received Turn: " + line);
