@@ -101,7 +101,8 @@ public class MainPanel extends JPanel implements Runnable {
                         GameCreator creator;
                         try {
                             creator = new GameCreator(localConfig); 
-                            creator.buildGameController().run();
+                            Thread thread = new Thread(creator.buildGameController());
+                            thread.start();
                         } catch (GameCreator.GameCreationException ex) {
                             JOptionPane.showMessageDialog(mainFrame, ex, "Error on creating local Game", JOptionPane.ERROR_MESSAGE);
                         }

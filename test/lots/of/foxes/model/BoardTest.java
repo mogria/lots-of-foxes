@@ -18,7 +18,8 @@ public class BoardTest {
     
     
     private Board board;
-    private Player player;
+    private Player player1;
+    private Player player2;
 
     /**
      * list of all valid line coordinates for lines on a 3x2 board
@@ -57,8 +58,10 @@ public class BoardTest {
     @Before
     public void setUp() {
         board = new Board(3, 2);
-        player = new Player(0, "TestPlayer", Color.BLACK);
-        board.setPlayer(player);
+        player1 = new Player(0, "TestPlayer 1", Color.BLACK);
+        player2 = new Player(1, "TestPlayer 2", Color.BLACK);
+        board.setPlayer(player1);
+        board.setPlayer(player2);
     }
 
     @After
@@ -101,7 +104,7 @@ public class BoardTest {
     public void testPlayLine() {
         System.out.println("playLine");
         Line line = board.getLines().stream().findAny().get();
-        boolean result = board.playLine(player, line.getId());
+        boolean result = board.playLine(player1, line.getId());
         assertEquals(true, result);
         assertNotNull(line.getOwner());
     }
@@ -120,7 +123,7 @@ public class BoardTest {
         };
         
         Arrays.stream(lines).forEach(line -> {
-            assertEquals(true, board.playLine(player, line.getId()));
+            assertEquals(true, board.playLine(player1, line.getId()));
             assertNotNull(line.getOwner());
         });
         
@@ -139,11 +142,11 @@ public class BoardTest {
         assertEquals(false, board.isBoardFull());
         Random rand = new Random();
         board.getLines().stream().filter(line -> rand.nextBoolean()).forEach(line -> {
-            board.playLine(player, line);
+            board.playLine(player1, line);
         });
         assertEquals(false, board.isBoardFull());
         board.getLines().stream().filter(line -> line.getOwner() != null).forEach(line -> {
-            board.playLine(player, line);
+            board.playLine(player1, line);
         });
 
         assertEquals(false, board.isBoardFull());
@@ -177,6 +180,20 @@ public class BoardTest {
             assertEquals(coords[1], line.getRow());
         });
         assertNull(board.getBoxByCoordinate(0, 0));
+    }
+    
+    @Test
+    public void testDoubleBoxFill() {
+        board.playLine(player1, board.getLineByCoordinate(0, 1));
+        board.playLine(player2, board.getLineByCoordinate(1, 0));
+        board.playLine(player1, board.getLineByCoordinate(1, 2));
+        board.playLine(player2, board.getLineByCoordinate(3, 2));
+        board.playLine(player1, board.getLineByCoordinate(4, 1));
+        board.playLine(player2, board.getLineByCoordinate(3, 0));
+        board.playLine(player1, board.getLineByCoordinate(2, 1));
+        
+        assertEquals(player1, board.getBoxByCoordinate(1, 1).getOwner());
+        assertEquals(player1, board.getBoxByCoordinate(3, 1).getOwner());
     }
 
 }
