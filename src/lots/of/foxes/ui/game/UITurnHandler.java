@@ -25,7 +25,7 @@ public class UITurnHandler extends AbstractTurnHandler {
     private final Object turnLock = new Object();
 
 
-    public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread parentThread) {
+    public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread parentThread, boolean doIStartFirst) {
         super(board, player);
         this.parentThread = parentThread;
         boardUI = new BoardUI(board, 10, 50, turnLock);
@@ -35,6 +35,11 @@ public class UITurnHandler extends AbstractTurnHandler {
         frame.add(gameInfo, BorderLayout.EAST);
         uiThread = new Thread(boardUI);
         uiThread.start();
+        gameInfo.setEnemy();
+        if(doIStartFirst){
+            gameInfo.setYou();
+            gameInfo.repaint();
+        }
     }
     public BoardUI getBoardUI() {
         return boardUI;
@@ -42,13 +47,13 @@ public class UITurnHandler extends AbstractTurnHandler {
 
     @Override
     public void sendTurn(Line line) {
-        gameInfo.setEnemy();
-        gameInfo.repaint();
         boardUI.repaint();
     }
 
     @Override
     public Line receiveTurn() {
+        gameInfo.setYou();
+        gameInfo.repaint();
         try {
             synchronized(turnLock) {
                 turnLock.wait();
@@ -56,7 +61,8 @@ public class UITurnHandler extends AbstractTurnHandler {
         } catch (InterruptedException ex) {
             Logger.getLogger(UITurnHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        gameInfo.setYou();
+
+        gameInfo.setEnemy();
         gameInfo.repaint();
         return boardUI.GetlastClickedLine();
     }
