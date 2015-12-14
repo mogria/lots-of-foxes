@@ -19,21 +19,22 @@ public class NotSoDumbAITurnHandler extends AbstractAITurnHandler {
 
     @Override
     public Line receiveTurn() {
-        List<Box> closableBoxes = BoardUtil.getCloseableBoxes(board);
+        // see if any boxes can be closes
+        List<Box> closableBoxes = BoardUtil.filterCloseableBoxes(board);
         if(closableBoxes.size() > 0) {
-            List<Line> closingLines = BoardUtil.filterAvailableLines(BoardUtil.getLinesSurroundingBox(board, closableBoxes.get(0)));
-            if(closingLines.size() > 0) {
-                return closingLines.get(0);
-            }
-
-            
+            Box random3LineBox = BoardUtil.getRandomFromList(closableBoxes);
+            List<Line> surroundingLines = BoardUtil.getLinesSurroundingBox(board, random3LineBox);
+            return BoardUtil.getRandomAvailableLine(surroundingLines);
         }
                     
-        List<Box> suboptimalBoxes = BoardUtil.filterBoxes(new ArrayList<>(board.getBoxes()), box -> box.getLineCount() < 3);
+        // play boxes with 1 or 0 lines
+        List<Box> suboptimalBoxes = BoardUtil.filterBoxes(new ArrayList<>(board.getBoxes()), box -> box.getLineCount() <= 1);
         if(suboptimalBoxes.size() > 0) {
-            return BoardUtil.getRandomFromList(BoardUtil.filterAvailableLines(BoardUtil.getLinesSurroundingBox(board, BoardUtil.getRandomFromList(suboptimalBoxes))));
+            Box randomBox = BoardUtil.getRandomFromList(suboptimalBoxes);
+            return BoardUtil.getRandomAvailableLine(BoardUtil.getLinesSurroundingBox(board, randomBox));
         }
-            
+        
+        // play something random
         return BoardUtil.getRandomAvailableLine(board);
     }
     

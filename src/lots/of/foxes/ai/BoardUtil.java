@@ -17,21 +17,28 @@ import lots.of.foxes.model.Line;
  * @author Moritz
  */
 public class BoardUtil {
-    
-    public static <T> T getRandomFromList(List<T> list) {
-        return list.get(new Random().nextInt(list.size()));
-    }
-    
     public static List<Line> filterAvailableLines(List<Line> lines) {
         return lines.stream()
                 .filter(line -> line.getOwner() == null)
                 .collect(Collectors.toList());
     }
     
-    public static List<Box> filterAvailableBoxes(List<Box> boxes) {
+    public static List<Box> filterBoxes(List<Box> boxes, Predicate<Box> predicate) {
         return boxes.stream()
-                .filter(box -> box.getOwner() == null)
+                .filter(predicate)
                 .collect(Collectors.toList());
+    }
+    
+    public static List<Box> filterAvailableBoxes(List<Box> boxes) {
+        return filterBoxes(boxes, box -> box.getOwner() == null);
+    }
+    
+    public static List<Box> filterBoxesWithLineCount(Board board, int numberOfLines) {
+        return filterBoxes(new ArrayList<>(board.getBoxes()), box -> box.getLineCount() == numberOfLines);
+    }
+    
+    public static List<Box> filterCloseableBoxes(Board board) {
+        return filterBoxesWithLineCount(board, 3);
     }
     
     public static <T> List<T> filterOutElements(List<T> listToFilter, List<T> elementsToRemove) {
@@ -39,26 +46,20 @@ public class BoardUtil {
                 .filter(e -> !elementsToRemove.contains(e))
                 .collect(Collectors.toList());
     }
-        
     
-    public static Line getRandomAvailableLine(Board board) {
+    public static <T> T getRandomFromList(List<T> list) {
+        if(list.isEmpty()) return null;
+        return list.get(new Random().nextInt(list.size()));
+    }
+    
+    public static Line getRandomAvailableLine(List<Line> lines) {
         return BoardUtil.getRandomFromList(
-            BoardUtil.filterAvailableLines(new ArrayList<>(board.getLines()))
+            BoardUtil.filterAvailableLines(lines)
         );
     }
-
-    public static List<Box> filterBoxes(List<Box> boxes, Predicate<Box> predicate) {
-        return boxes.stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
-    }
     
-    public static List<Box> getBoxesWithLineCount(Board board, int numberOfLines) {
-        return filterBoxes(new ArrayList<>(board.getBoxes()), box -> box.getLineCount() == numberOfLines);
-    }
-    
-    public static List<Box> getCloseableBoxes(Board board) {
-        return getBoxesWithLineCount(board, 3);
+    public static Line getRandomAvailableLine(Board board) {
+        return getRandomAvailableLine(new ArrayList<>(board.getLines()));
     }
     
     public static List<Line> getLinesSurroundingBox(Board board, Box box) {
@@ -116,10 +117,10 @@ public class BoardUtil {
     
     
     public static List<Box> getBorderBoxes(Board board) {
-        return board.getBoxes().stream()
-                .filter(box -> box.getColumn() == 1 || box.getColumn() == board.getGridSizeX() - 2
-                            || box.getRow()    == 1 || box.getRow()    == board.getGridSizeY() - 2)
-                .collect(Collectors.toList());
+        return filterBoxes(new ArrayList<>(board.getBoxes()), box -> {
+            return box.getColumn() == 1 || box.getColumn() == board.getGridSizeX() - 2
+                || box.getRow()    == 1 || box.getRow()    == board.getGridSizeY() - 2;
+        });
     }
     
     public static List<List<Box>> getChains(Board board) {
