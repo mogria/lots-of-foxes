@@ -147,7 +147,7 @@ public final class GameCreator {
                 aiPlayer = new Player(1, "DumbAI", Color.blue);
                 aiTurnHandler = new DumbAITurnHandler(board, aiPlayer);
                 break;
-            case QUITE_LOW:
+            case MEDIUM:
                 aiPlayer = new Player(1, "NotSoDumbAI", Color.blue);
                 aiTurnHandler = new NotSoDumbAITurnHandler(board, aiPlayer);
         }
