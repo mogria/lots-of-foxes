@@ -1,8 +1,10 @@
 package lots.of.foxes.model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents the game board.
@@ -215,6 +217,16 @@ public final class Board {
      */
     public Collection<Line> getLines() {
         return lines.values();
+    }
+    
+    public Collection<GridElement> getPointCoordinates() {
+        List<GridElement> list = new ArrayList<>();
+        for(int x = 0; x < getGridSizeX(); x += 2) {
+            for(int y = 0; y < getGridSizeY(); y += 2) {
+                list.add(new GridElement(genId(x, y)));
+            }
+        }
+        return list;
     }
     
     /**

@@ -1,5 +1,8 @@
 package lots.of.foxes.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 
 /**
  * Represents a single box on the Board
@@ -13,10 +16,16 @@ public class Box extends GridElement {
     private int lineCount = 0;
     
     /**
-     * the player which used the last line.
+     * the player which drew the last line.
      */
     private Player owner = null;
+
+    public static final String PROP_OWNER = "owner";
     
+    
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+
     public Box(int boxId) {
         super(boxId);
     }
@@ -35,9 +44,9 @@ public class Box extends GridElement {
      *
      * @return the value of owner
      */
-    public Player getOwner() {
-        return owner;
-    }
+    //public Player getOwner() {
+    //    return owner;
+    //}
     
     /**
      * Increases the number of lines in use around this Box.
@@ -50,10 +59,49 @@ public class Box extends GridElement {
     public boolean addLine(Player player) {
         lineCount++;
         if(lineCount >= 4) {
-            owner = player;
+            setOwner(player);
             player.increaseBoxCount();
             return true;
         }
         return false;    
+    }
+    
+    /**
+     * Get the value of owner
+     *
+     * @return the value of owner
+     */
+    public Player getOwner() {
+        return owner;
+    }
+
+    /**
+     * Set the value of owner
+     *
+     * @param owner new value of owner
+     */
+    private void setOwner(Player owner) {
+        Player oldOwner = this.owner;
+        this.owner = owner;
+        propertyChangeSupport.firePropertyChange(PROP_OWNER, oldOwner, owner);
+    }
+
+
+    /**
+     * Add PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
     }
 }

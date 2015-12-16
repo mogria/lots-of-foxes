@@ -8,93 +8,80 @@ package lots.of.foxes.ui.game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import lots.of.foxes.model.Box;
+import lots.of.foxes.ui.Resources;
 
 /**
  *
  * @author Adrian
  */
-public class BoxControl extends JPanel {
+public class BoxControl extends JLabel {
 
     private Box box;
-    private int lineheight;
-    private int boxWidth;
-    private int lineoffset;
+    private GrassGenerator grassGenerator;
 
-    public BoxControl(Box box, int lineheight, int boxWidth, int pointMultiplicator) {
-        this.box = box;
-        this.lineheight = lineheight;
-        this.boxWidth = boxWidth;
-        this.lineoffset = (lineheight * pointMultiplicator) / 4;
+    public BoxControl(Box box) {
+        grassGenerator = new GrassGenerator(new Random().nextInt(), 60);
+        this.setMaximumSize(new Dimension(0, 0));
+        this.setPreferredSize(new Dimension(0, 0));
         
+        this.box = box;
+        BoxControl that = this;
+        this.box.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+            if(evt.getPropertyName().equals(Box.PROP_OWNER)) {
+                that.repaint();
+            }
+        });
     }
-
-    @Override
-    public int getX() {
-        return calcX();
-    }
-
-    @Override
-    public int getY() {
-        return calcY();
-    }
-
-    @Override
-    public Dimension getSize() {
-        return new Dimension(boxWidth - lineheight, boxWidth - lineheight);
-    }
-
-    @Override
-    public int getHeight() {
-        return boxWidth;
-    }
-
-    @Override
-    public int getWidth() {
-        return boxWidth;
-    }
-
-    /**
-     * Calculates the X coordinate of the current Row/Column
-     *
-     * @return X value
-     */
-    private int calcX() {
-
-        int cntBoxes = box.getColumn() / 2;
-        int cntLines = box.getColumn() - cntBoxes;
-
-        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
-
-    }
-
-    /**
-     * Calculates the Y coordinate of the current Row/Column
-     *
-     * @return Y value
-     */
-    private int calcY() {
-        int cntBoxes = box.getRow() / 2;
-        int cntLines = box.getRow() - cntBoxes;
-
-        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
-    }
-
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         if (box.getOwner() != null) {
             g.setColor(box.getOwner().getColor());
-             g.fillRect(0, 0, boxWidth, boxWidth);
-             this.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+            g.fillRect(0, 0, getWidth(), getHeight());
         } else {
-            //g.setColor(Color.gray);
+            grassGenerator.drawGrass(g, getWidth(), getHeight());
             
         }
+        
+        Image standingFox = Resources.getStandingFox();
+        drawFoxInBox(g, standingFox);
+    }
+    
+    private void drawFoxInBox(Graphics g, Image img) {
+        if(img != null && img.getWidth(null) != -1) {
+            int imageWidth = img.getWidth(null);
+            int imageHeight = img.getHeight(null);
+            
+            
+            double scaler = Math.min(getWidth() / (double)imageWidth, getHeight() / (double)imageHeight);
+            imageWidth = (int)(imageWidth * scaler);
+            imageHeight = (int)(imageHeight * scaler);
+            Image rescaled = img.getScaledInstance(imageWidth, imageHeight, 0);
+            
+            
+            int offsetX = (getWidth() - imageWidth) / 2;
+            int offsetY = (getHeight() - imageHeight) / 2;
+            
+            
+            g.drawImage(rescaled, offsetX, offsetY, null);
+        }
+    }
 
-       
+    public Box getBox() {
+        return box;
     }
 }

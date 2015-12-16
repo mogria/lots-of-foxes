@@ -6,14 +6,22 @@
 package lots.of.foxes.ui.game;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import lots.of.foxes.ITurnHandler;
 import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Box;
@@ -24,159 +32,134 @@ import lots.of.foxes.model.Player;
  *
  * @author Adrian
  */
-public class BoardUI extends JPanel implements MouseListener, ITurnHandler, Runnable {
+public class BoardUI extends JPanel implements Runnable {
+    
+    static private final double POINT_WEIGHT = 0.2;
+    static private final double BOX_WEIGHT = 1;
+    
+    static public final Color WOOD_COLOR = new Color(205, 133, 63);
+    
+    private final Board board;
 
-   private Collection<LineControl> linesControls = new ArrayList<>();
-    private Collection<BoxControl> boxControls = new ArrayList<>();
-
+    private final Object turnLock;
     private Line lastClickedLine;
-    private int lineheight;
-    private int boxWidth;
-    private int gridX;
-    private int gridY;
-    private int pointMultiplicator = 2;
-    private Object turnLock;
+    
+    private final JPanel quadraticInnerPanel = new JPanel();
+    
+    private final LineClickListener listener;
+    
+    public class LineClickListener extends MouseAdapter {
 
-    public BoardUI(Board b, int lineheight, int boxWidth, Object turnLock) {
-        this.lineheight = lineheight;
-        this.boxWidth = boxWidth;
-        this.gridX = b.getGridSizeX() / 2 + 1;
-        this.gridY = b.getGridSizeX() / 2 + 1;
-        this.turnLock = turnLock;
-
-        InitializeBoard();
-        b.getLines().stream().map((l) -> new LineControl(l, lineheight, boxWidth, pointMultiplicator)).map((lc) -> {
-            linesControls.add(lc);
-            return lc;
-        }).forEach((lc) -> {
-            this.add(lc);
-        });
-
-        b.getBoxes().stream().map((bo) -> new BoxControl(bo, lineheight, boxWidth, pointMultiplicator)).map((bc) -> {
-            boxControls.add(bc);
-            return bc;
-        }).forEach((bc) -> {
-            this.add(bc);
-        });
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if(e.getSource() instanceof LineControl) {
+                LineControl clickedControl = (LineControl)e.getSource();
+                Line clickedLine = clickedControl.getLine();
+                if(clickedLine != null) {
+                    synchronized(turnLock) {
+                        lastClickedLine = clickedLine;
+                        turnLock.notifyAll();
+                    }
+                }
+            }
+        }
         
     }
 
-    /**
-     * Initialize the board, sets the Dimension and adds the Mouselistener
-     */
-    private void InitializeBoard() {
-        this.setLayout(new GridBagLayout());
-        Dimension d = new Dimension();
-        d.height = ((this.gridY) * (boxWidth + lineheight)) - boxWidth + (lineheight * pointMultiplicator / 2);
-        d.width = ((this.gridX) * (boxWidth + lineheight)) - boxWidth + (lineheight * pointMultiplicator / 2);
+    public BoardUI(Board b) {        
+        this.turnLock = new Object();
+        this.lastClickedLine = null;
+        
+        this.board = b;
+        this.listener = new LineClickListener();
+        
+        GridBagLayout layout = new GridBagLayout();
+        quadraticInnerPanel.setLayout(layout);
+        board.getLines().stream().forEach(line -> {
+            LineControl lc = new LineControl(line);
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.BOTH;
+            c.anchor = GridBagConstraints.CENTER;
+            c.weightx = line.isHorizontal() ? BOX_WEIGHT : POINT_WEIGHT;
+            c.weighty = line.isVertical()? BOX_WEIGHT : POINT_WEIGHT;
+            c.gridx = line.getColumn();
+            c.gridy = line.getRow();
+            lc.addMouseListener(listener);
+            quadraticInnerPanel.add(lc, c);
+        });
+        
+        board.getBoxes().stream().forEach(box -> {
+            BoxControl bc = new BoxControl(box);
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.BOTH;
+            c.anchor = GridBagConstraints.CENTER;
+            c.weightx  = BOX_WEIGHT;
+            c.weighty  = BOX_WEIGHT;
+            c.gridx = box.getColumn();
+            c.gridy = box.getRow();
+            quadraticInnerPanel.add(bc, c);
+        });
+        
+        board.getPointCoordinates().stream().forEach(point -> {
+            PointControl pc = new PointControl();
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.BOTH;
+            c.anchor = GridBagConstraints.CENTER;
+            c.weightx = POINT_WEIGHT;
+            c.weighty = POINT_WEIGHT;
+            c.gridx = point.getColumn();
+            c.gridy = point.getRow();
+            quadraticInnerPanel.add(pc, c);
+        });
+        
+        
+        GridBagLayout outerLayout = new GridBagLayout();
+        this.setLayout(outerLayout);
+        JPanel that = this;
+        this.addComponentListener(new ComponentAdapter() {
 
-        setPreferredSize(d);
-        setSize(d);
-        addMouseListener(this);
-    }
-
-    /**
-     * Paints the Dots on the Board
-     *
-     * @param Graphics object to paint on
-     */
-    private void paintDots(Graphics g) {
-        int r = (int) (lineheight * pointMultiplicator);
-        //Loop through all lines
-        for (int a = 0; a < this.gridY; a++) {
-            g.fillOval(0, a * (boxWidth + lineheight), r, r);
-            for (int i = 0; i < this.gridX; i++) {
-                g.fillOval(i * (boxWidth + lineheight), a * (boxWidth + lineheight), r, r);
+            @Override
+            public void componentResized(ComponentEvent e) {
+                
+                Component sourceComponent = e.getComponent();
+                GridBagConstraints gc = makeCenteringGridBagConstraints(sourceComponent.getWidth(), sourceComponent.getHeight());
+                outerLayout.setConstraints(quadraticInnerPanel, gc);
+                that.revalidate();
             }
-        }
+            
+        });
+        
+        this.add(quadraticInnerPanel);
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.     
-    }
+    
+    private GridBagConstraints makeCenteringGridBagConstraints(int outerWidth, int outerHeight) {
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.fill = GridBagConstraints.BOTH;
+        int sideLength = Math.min(outerWidth, outerHeight);
+        int offsetX = (outerWidth - sideLength) / 2;
+        int offsetY = (outerHeight - sideLength) / 2;
+        gc.insets = new Insets(offsetY, offsetX, offsetY, offsetX);
+        gc.weightx = 1;
+        gc.weighty = 1;
+        return gc;
+    } 
 
     /**
      * Returns the last clicked Row
      *
      * @return last clicked Row
      */
-    public Line GetlastClickedLine() {
-        return this.lastClickedLine;
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        this.paintDots(g);
-        /*
-        linesControls.stream().forEach((lc) -> {
-            lc.paintComponent(this.getGraphics());
-        });
-        boxControls.stream().forEach((bc) -> {
-            bc.paintComponent(this.getGraphics());
-        });
-*/
-    }
-
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        Line l = null;
-
-        for (LineControl lc : linesControls) {
-            if (lc.containsPoint(e.getPoint())) {
-                l = lc.getLine();
-                break;
-            }
+    public Line waitForLineClick() throws InterruptedException {
+        synchronized(turnLock) {
+            turnLock.wait();
+            return this.lastClickedLine;
         }
-
-        if (l != null) {
-            
-            this.lastClickedLine = l;
-            this.repaint();
-            synchronized(turnLock) {
-                turnLock.notifyAll();
-            }
-         
-        } else {
-            this.lastClickedLine = null;
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void sendTurn(Line line) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Line receiveTurn() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Player getPlayer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void run() {
-        this.repaint();
-        this.setVisible(true);
+        java.awt.EventQueue.invokeLater(() -> this.setVisible(true));
     }
 
 }

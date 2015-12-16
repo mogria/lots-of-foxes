@@ -1,6 +1,8 @@
 package lots.of.foxes.ui.game;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -28,11 +30,16 @@ public class UITurnHandler extends AbstractTurnHandler {
     public UITurnHandler(JFrame frame, Board board, Player player, int lineheight, int boxwidth, Thread parentThread, boolean doIStartFirst) {
         super(board, player);
         this.parentThread = parentThread;
-        boardUI = new BoardUI(board, 10, 50, turnLock);
+        boardUI = new BoardUI(board);
         gameInfo = new GameInfo(board.getPlayer(0), board.getPlayer(1));
-        frame.setLayout(new BorderLayout());
-        frame.add(boardUI, BorderLayout.WEST);
-        frame.add(gameInfo, BorderLayout.EAST);
+        java.awt.EventQueue.invokeLater(() -> {
+            BorderLayout layout = new BorderLayout();
+            frame.setLayout(layout);
+            frame.add(boardUI, BorderLayout.CENTER);
+            frame.add(gameInfo, BorderLayout.EAST);
+            frame.revalidate();
+            frame.repaint();
+        });
         uiThread = new Thread(boardUI);
         uiThread.start();
         gameInfo.setEnemy();
@@ -41,33 +48,31 @@ public class UITurnHandler extends AbstractTurnHandler {
             gameInfo.repaint();
         }
     }
+    
     public BoardUI getBoardUI() {
         return boardUI;
     }
 
     @Override
     public void sendTurn(Line line) {
-        boardUI.repaint();
-        gameInfo.updatePoints();
-        gameInfo.repaint();
+        java.awt.EventQueue.invokeLater(() -> boardUI.repaint());
     }
 
     @Override
     public Line receiveTurn() {
+
         gameInfo.setYou();
-        gameInfo.repaint();
+        
+        Line lineClicked = null;
         try {
-            synchronized(turnLock) {
-                turnLock.wait();
-            }
+            lineClicked = boardUI.waitForLineClick();
         } catch (InterruptedException ex) {
             Logger.getLogger(UITurnHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         gameInfo.setEnemy();
-        gameInfo.updatePoints();
-        gameInfo.repaint();
-        return boardUI.GetlastClickedLine();
+        
+        return lineClicked;
     }
 
 }

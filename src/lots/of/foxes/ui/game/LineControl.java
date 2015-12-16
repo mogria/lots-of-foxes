@@ -9,119 +9,46 @@ import lots.of.foxes.model.LineDirection;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
+import java.util.Random;
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
+import javax.swing.JButton;
 import lots.of.foxes.model.Line;
 
 /**
  *
  * @author Adrian
  */
-public class LineControl extends JPanel {
+public class LineControl extends JButton {
 
-    private Line line;
-    /**
-     * Height of the Line
-     */
-    private int lineheight;
-    /**
-     * Dimension of the box
-     */
-    private int boxWidth;
+    private final Line line;
+    private final GrassGenerator grassGenerator;
 
-    private int lineoffset;
-
-    public LineControl(Line line, int lineheight, int boxWidth, int pointMultiplicator) {
+    
+    public LineControl(Line line) {
         this.line = line;
-        this.lineheight = lineheight;
-        this.boxWidth = boxWidth;
-        this.lineoffset = (lineheight * pointMultiplicator) / 4;
+        this.grassGenerator = new GrassGenerator(new Random().nextInt(), 10);
+        this.setMaximumSize(new Dimension(0, 0));
+        this.setPreferredSize(new Dimension(0, 0));
 
-    }
-
-    /**
-     * The current Line Object
-     */
-    public Line getLine() {
-        return line;
-    }
-
-    /**
-     * Calculates the X coordinate of the current Row/Column
-     *
-     * @return X value
-     */
-    private int calcX() {
-
-        int cntBoxes = line.getColumn() / 2;
-        int cntLines = line.getColumn() - cntBoxes;
-
-        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
-    }
-
-    /**
-     * Calculates the Y coordinate of the current Row/Column
-     *
-     * @return Y value
-     */
-    private int calcY() {
-        int cntBoxes = line.getRow() / 2;
-        int cntLines = line.getRow() - cntBoxes;
-
-        return (cntBoxes * boxWidth) + (cntLines * lineheight) + lineoffset;
-    }
-
-
-
-    /**
-     * Calculates if the passed Point is in the object
-     *
-     * @param p Point to check
-     * @return is in the current panel
-     */
-    public boolean containsPoint(Point p) {
-        return this.getX() < p.x && p.x < (this.getX() + this.getWidth()) && this.getY() < p.y && p.y < (this.getY() + this.getHeight());
-    }
-
-    @Override
-    public int getX() {
-        return calcX();
-    }
-
-    @Override
-    public int getY() {
-        return calcY();
-    }
-
-    @Override
-    public Dimension getSize() {
-
-        return new Dimension(line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
-    }
-
-    @Override
-    public int getHeight() {
-        return line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth;
-    }
-
-    @Override
-    public int getWidth() {
-        return line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
 
         if (line.getOwner() != null) {
             g.setColor(line.getOwner().getColor());
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            
+             setBorder(BorderFactory.createLineBorder(BoardUI.WOOD_COLOR.darker(), 3));
         } else {
-            g.setColor(Color.lightGray);
+            grassGenerator.drawGrass(g, getWidth(), getHeight());
         }
-
-        g.fillRect(0, 0, line.getDirection() == LineDirection.Horizontal ? boxWidth : lineheight, line.getDirection() == LineDirection.Horizontal ? lineheight : boxWidth);
-
+    }
+    
+    public Line getLine() {
+        return line;
     }
 
 }

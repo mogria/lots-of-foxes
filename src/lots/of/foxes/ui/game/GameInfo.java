@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lots.of.foxes.ui.game;
 
 import java.awt.Color;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import lots.of.foxes.model.Player;
 
 /**
@@ -23,6 +20,16 @@ public class GameInfo extends javax.swing.JPanel {
         this.you = you;
         this.enemy = enemy;
         initComponents();
+        turnInfo.setVisible(true);
+        
+        
+        PropertyChangeListener listener = (PropertyChangeEvent evt) -> {
+            if(evt.getPropertyName().equals(Player.PROP_BOXCOUNT)) {
+                updatePoints();
+            }
+        };
+        you.addPropertyChangeListener(listener);
+        enemy.addPropertyChangeListener(listener);
     }
 
     /**
@@ -122,24 +129,21 @@ public class GameInfo extends javax.swing.JPanel {
     }//GEN-LAST:event_jPlayer2ActionPerformed
 
     public void setEnemy(){
-        turnInfo.setVisible(true);
         turnInfo.setText("Enemy's turn!");
         turnInfo.setForeground(Color.white);
         turnInfo.setBackground(Color.blue);
     }
     
     public void setYou(){
-        turnInfo.setVisible(true);
         turnInfo.setText("Your turn!");
         turnInfo.setForeground(Color.black);
         turnInfo.setBackground(Color.red);
     }
 
     public void updatePoints(){
-        System.out.println("You: " + you.getBoxCount());
-        System.out.println("Enemy: " + you.getBoxCount());
         youPoint.setText("" + you.getBoxCount());
         enemyPoint.setText("" + enemy.getBoxCount());
+        java.awt.EventQueue.invokeLater(() -> repaint());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField enemyPoint;
