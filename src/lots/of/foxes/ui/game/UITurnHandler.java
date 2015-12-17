@@ -31,7 +31,7 @@ public class UITurnHandler extends AbstractTurnHandler {
         super(board, player);
         this.parentThread = parentThread;
         boardUI = new BoardUI(board);
-        gameInfo = new GameInfo(board.getPlayer(0), board.getPlayer(1));
+        gameInfo = new GameInfo(board);
         java.awt.EventQueue.invokeLater(() -> {
             BorderLayout layout = new BorderLayout();
             frame.setLayout(layout);
