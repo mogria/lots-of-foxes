@@ -165,8 +165,8 @@ public class MainPanel extends JPanel implements Runnable {
             }
 
         });
-        buttonPanel.add(loadButton);
-        buttonPanel.add(settingsButton);
+        //buttonPanel.add(loadButton);
+        //buttonPanel.add(settingsButton);
 
         return buttonPanel;
     }
