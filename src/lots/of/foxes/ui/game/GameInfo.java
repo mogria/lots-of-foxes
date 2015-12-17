@@ -3,6 +3,7 @@ package lots.of.foxes.ui.game;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import lots.of.foxes.model.Board;
 import lots.of.foxes.model.Player;
 
 /**
@@ -13,12 +14,14 @@ public class GameInfo extends javax.swing.JPanel {
 
     private Player you;
     private Player enemy;
+    private Board board;
     /**
      * Creates new form GameInfo
      */
-    public GameInfo(Player you, Player enemy) {
-        this.you = you;
-        this.enemy = enemy;
+    public GameInfo(Board board) {
+        this.you = board.getPlayer(0);
+        this.enemy = board.getPlayer(1);
+        this.board = board;
         initComponents();
         turnInfo.setVisible(true);
         
@@ -143,6 +146,17 @@ public class GameInfo extends javax.swing.JPanel {
     public void updatePoints(){
         youPoint.setText("" + you.getBoxCount());
         enemyPoint.setText("" + enemy.getBoxCount());
+        if(board.isBoardFull()){
+            turnInfo.setText("You win!");
+            turnInfo.setFont(new java.awt.Font("Tahoma", 1, 24));
+            turnInfo.setForeground(Color.black);
+            turnInfo.setBackground(Color.red);
+            if(you.getBoxCount()<enemy.getBoxCount()){
+                turnInfo.setText("Enemy wins!");
+                turnInfo.setForeground(Color.white);
+                turnInfo.setBackground(Color.blue);
+            }   
+        }
         java.awt.EventQueue.invokeLater(() -> repaint());
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
