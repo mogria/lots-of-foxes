@@ -13,6 +13,7 @@ import javax.swing.JPanel;
  * @author Dethrall
  */
 public final class LofFrame extends JFrame{
+    private static final String VERSION = "1.0";
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
     
@@ -28,7 +29,7 @@ public final class LofFrame extends JFrame{
     }
     
     public LofFrame(){
-        super("Lot Of Foxes");
+        super("Lots Of Foxes v" + VERSION);
         this.contentPanel = null;
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

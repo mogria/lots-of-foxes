@@ -1,6 +1,8 @@
 package lots.of.foxes.model;
 
 import java.awt.Color;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 /**
@@ -28,6 +30,11 @@ public class Player implements Serializable {
      * the number of boxes owned by this player
      */
     private int boxCount = 0;
+
+    public static final String PROP_BOXCOUNT = "boxCount";
+
+
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public Player(int playerNum, String name, Color color) {
         if(playerNum < 0 || playerNum > 1) throw new IllegalArgumentException("playerNum must either be 0 or 1");
@@ -63,10 +70,11 @@ public class Player implements Serializable {
         return color;
     }
     
+    
     /**
-     * Get the number of boxes owned by this player
+     * Get the value of boxCount
      *
-     * @returnthe number of boxes owned by this player
+     * @return the value of boxCount
      */
     public int getBoxCount() {
         return boxCount;
@@ -76,7 +84,29 @@ public class Player implements Serializable {
      * increases boxCount by 1
      */
     public void increaseBoxCount() {
-        boxCount++;
-    } 
+        int oldBoxCount = this.boxCount;
+        this.boxCount = boxCount + 1;
+        propertyChangeSupport.firePropertyChange(PROP_BOXCOUNT, oldBoxCount, boxCount);
+    }
+    
+    
+    /**
+     * Add PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
 
 }
