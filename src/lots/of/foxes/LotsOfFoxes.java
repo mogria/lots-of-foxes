@@ -9,7 +9,7 @@ import lots.of.foxes.ui.LofFrame;
 
 /**
  *
- * @author Dethrall
+ * @author Marcel
  */
 public class LotsOfFoxes {
 

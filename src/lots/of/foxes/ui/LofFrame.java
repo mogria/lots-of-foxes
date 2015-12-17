@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Dethrall
+ * @author Marcel
  */
 public final class LofFrame extends JFrame{
     private static final String VERSION = "1.0";
