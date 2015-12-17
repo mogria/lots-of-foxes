@@ -91,7 +91,9 @@ public final class GameCreator {
         switch(config.getGameType()) {
             default:
             case LOCAL_AI:
-                return new GameController(config, board, buildUITurnHandler(), buildAITurnHandler());
+                // build AI turn handler first, because board is modified
+                ITurnHandler aihandler = buildAITurnHandler();
+                return new GameController(config, board, buildUITurnHandler(), aihandler);
             case REMOTE_HOST:
                 return new GameController(config, board, buildUITurnHandler(), buildHostRemoteTurnHandler(sb[0]));
             case REMOTE_CLIENT:
