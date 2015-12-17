@@ -36,14 +36,15 @@ public class LineControl extends JButton {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-
+        
+        grassGenerator.drawGrass(g, getWidth(), getHeight());
         if (line.getOwner() != null) {
-            g.setColor(line.getOwner().getColor());
+            Color col = line.getOwner().getColor();
+            g.setColor(new Color(col.getRed(), col.getGreen(), col.getBlue(), BoardUI.PLAYER_COLOR_ALPHA));
             g.fillRect(0, 0, this.getWidth(), this.getHeight());
             
-             setBorder(BorderFactory.createLineBorder(BoardUI.WOOD_COLOR.darker(), 3));
+            setBorder(BorderFactory.createLineBorder(BoardUI.WOOD_COLOR.darker(), 3));
         } else {
-            grassGenerator.drawGrass(g, getWidth(), getHeight());
         }
     }
     

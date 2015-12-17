@@ -1,32 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lots.of.foxes.ui.game;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
-import lots.of.foxes.ITurnHandler;
+import javax.swing.Timer;
 import lots.of.foxes.model.Board;
-import lots.of.foxes.model.Box;
 import lots.of.foxes.model.Line;
-import lots.of.foxes.model.Player;
 
 /**
  *
@@ -38,6 +25,7 @@ public class BoardUI extends JPanel implements Runnable {
     static private final double BOX_WEIGHT = 1;
     
     static public final Color WOOD_COLOR = new Color(205, 133, 63);
+    static public final int PLAYER_COLOR_ALPHA = 170;
     
     private final Board board;
 
@@ -128,6 +116,16 @@ public class BoardUI extends JPanel implements Runnable {
             }
             
         });
+        
+        
+        new Timer(300, (ActionEvent e) -> {
+            for(Component component : quadraticInnerPanel.getComponents()) {
+                if(component instanceof BoxControl) {
+                    BoxControl boxControl = (BoxControl)component;
+                    boxControl.updateFoxImage();
+                }
+            }
+        }).start();
         
         this.add(quadraticInnerPanel);
     }
