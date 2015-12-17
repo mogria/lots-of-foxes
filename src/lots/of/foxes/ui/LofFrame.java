@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  * @author Dethrall
  */
 public final class LofFrame extends JFrame{
-    private static final String VERSION = "1.0";
+    private static final String VERSION = "6.9";
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 600;
     
